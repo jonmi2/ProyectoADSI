@@ -1,0 +1,5 @@
+Jonmi alquiler de películas 
+Yu gestión de usuarios
+Mikel creación listas personalizadas 
+Andokas incorporación de nuevas pelis
+Iván puntuación de películas
