@@ -8,6 +8,9 @@ import java.util.Observable;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import modelo.GestorPpal;
+
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.GridLayout;
@@ -37,6 +40,10 @@ public class Inicio extends JFrame {
 				try {
 					Inicio frame = new Inicio();
 					frame.setVisible(true);
+					
+					//metodo para cargar los datos de la base de datos en objetos de java
+					GestorPpal miPpal = GestorPpal.getGestorPpal();
+					miPpal.cargarDatos();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
