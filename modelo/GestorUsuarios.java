@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -80,5 +81,60 @@ public class GestorUsuarios
             e.printStackTrace();
         }
 		
+	}
+
+	public boolean puedeIniciarsSesion(String pidUsuario) 
+	{
+		boolean rdo =false;
+		
+		String url = "jdbc:mysql://localhost:3306/adsibd";
+        String user = "root"; //Usuario por defecto en XAMPP
+
+        String password = "";  // Contraseña vacía por defecto en XAMPP
+
+        //establecer conexión
+        try (Connection connection = DriverManager.getConnection(url, user, password)) 
+        {
+            System.out.println("¡Conexión exitosa a MySQL!");
+         // Consulta SQL para verificar la existencia del usuario y su rol
+            String query = "SELECT rol FROM Usuario WHERE idUsuario = ?";
+
+            try (PreparedStatement statement = connection.prepareStatement(query)) 
+            {
+            	// Establecer el parámetro del idUsuario en la consulta
+                statement.setInt(1, Integer.parseInt(pidUsuario));
+
+                // Ejecutar la consulta
+                try (ResultSet resultSet = statement.executeQuery()) 
+                {
+                    // Si se encuentra el usuario
+                    if (resultSet.next()) 
+                    {
+                        String rol = resultSet.getString("rol");
+                        // Comprobar si el rol es "usuario registrado"
+                        if ("usuario registrado".equalsIgnoreCase(rol)) 
+                        {
+                            rdo= true;
+                        }
+                    }
+                    else
+                    {
+                    	rdo= false;
+                    }            
+                }                   
+            } 
+            catch (Exception e) 
+            {
+            	e.printStackTrace();
+            	rdo = false;
+            }
+        } 
+        catch (SQLException e1) 
+        {
+        	rdo=false;
+        	e1.printStackTrace();
+        }
+        
+        return rdo;
 	}
 }

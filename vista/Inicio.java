@@ -20,17 +20,24 @@ import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
+import java.awt.BorderLayout;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 public class Inicio extends JFrame {
 
-	private JPanel contentPane;
+	private JPanel panelPpal;
 
 	private static Inicio miMenu = new Inicio();
 	private Controler controler = null;
-	private JButton btnNewButton;
-	private JButton btnNewButton_1;
-	private JTextField txtPantallaPrincipal;
-	private JTextField txtVideoclub;
+	private JPanel panelArriba;
+	private JPanel panelAbajo;
+	private JLabel labelVideoclub;
+	private JLabel labelPpal;
+	private JPanel panelAbajoIzq;
+	private JPanel panelAbajoDer;
+	private JButton botonRegistrarse;
+	private JButton botonIniciarSesion;
 	/**
 	 * Launch the application.
 	 */
@@ -57,17 +64,15 @@ public class Inicio extends JFrame {
 	private Inicio() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(0, 128, 192));
-		contentPane.setForeground(new Color(0, 128, 192));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panelPpal = new JPanel();
+		panelPpal.setBackground(new Color(0, 128, 192));
+		panelPpal.setForeground(new Color(0, 128, 192));
+		panelPpal.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		setContentPane(contentPane);
-		contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		contentPane.add(getBtnNewButton_1());
-		contentPane.add(getTxtPantallaPrincipal());
-		contentPane.add(getTxtVideoclub());
-		contentPane.add(getBtnNewButton());
+		setContentPane(panelPpal);
+		panelPpal.setLayout(new GridLayout(2, 1, 0, 0));
+		panelPpal.add(getPanel());
+		panelPpal.add(getPanelAbajo());
 	}
 	
 	public static Inicio getMenu() {
@@ -86,7 +91,15 @@ public class Inicio extends JFrame {
 	{
 		public void actionPerformed(ActionEvent e) 
 		{
-			
+			if (e.getSource().equals(getBotonIniciarSesion()))
+			{
+				System.out.println("------------------------------------");
+				System.out.println("Pulsado boton inicio sesión");
+				System.out.println("------------------------------------");
+				setVisible(false);
+				IniciarSesion miInicioSesion = IniciarSesion.getIniciarSesion();
+				miInicioSesion.setVisible(true);
+			}
 		}
 
 	}
@@ -97,37 +110,72 @@ public class Inicio extends JFrame {
 			//lo que tenga q hacer
 		}
 	}
-
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("Iniciar Sesi\u00F3n");
+	private JPanel getPanel() {
+		if (panelArriba == null) {
+			panelArriba = new JPanel();
+			panelArriba.setBackground(new Color(0, 64, 128));
+			panelArriba.setLayout(new BorderLayout(0, 0));
+			panelArriba.add(getLabelVideoclub(), BorderLayout.NORTH);
+			panelArriba.add(getLabelPpal(), BorderLayout.SOUTH);
 		}
-		return btnNewButton;
+		return panelArriba;
 	}
-	private JButton getBtnNewButton_1() {
-		if (btnNewButton_1 == null) {
-			btnNewButton_1 = new JButton("Registrarse");
-			btnNewButton_1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
+	private JPanel getPanelAbajo() {
+		if (panelAbajo == null) {
+			panelAbajo = new JPanel();
+			panelAbajo.setBackground(new Color(0, 128, 192));
+			panelAbajo.setLayout(new GridLayout(1, 2, 0, 0));
+			panelAbajo.add(getPanelAbajoIzq());
+			panelAbajo.add(getPanelAbajoDer());
 		}
-		return btnNewButton_1;
+		return panelAbajo;
 	}
-	private JTextField getTxtPantallaPrincipal() {
-		if (txtPantallaPrincipal == null) {
-			txtPantallaPrincipal = new JTextField();
-			txtPantallaPrincipal.setText("PANTALLA PRINCIPAL");
-			txtPantallaPrincipal.setColumns(10);
+	private JLabel getLabelVideoclub() {
+		if (labelVideoclub == null) {
+			labelVideoclub = new JLabel("VIDEOCLUB");
+			labelVideoclub.setHorizontalAlignment(SwingConstants.CENTER);
+			labelVideoclub.setVerticalAlignment(SwingConstants.BOTTOM);
+			labelVideoclub.setFont(new Font("Snap ITC", Font.PLAIN, 36));
+			labelVideoclub.setForeground(new Color(192, 192, 192));
 		}
-		return txtPantallaPrincipal;
+		return labelVideoclub;
 	}
-	private JTextField getTxtVideoclub() {
-		if (txtVideoclub == null) {
-			txtVideoclub = new JTextField();
-			txtVideoclub.setText("VIDEOCLUB");
-			txtVideoclub.setColumns(10);
+	private JLabel getLabelPpal() {
+		if (labelPpal == null) {
+			labelPpal = new JLabel("PANTALLA PRINCIPAL");
+			labelPpal.setFont(new Font("Tahoma", Font.ITALIC, 33));
+			labelPpal.setHorizontalAlignment(SwingConstants.CENTER);
+			labelPpal.setForeground(new Color(192, 192, 192));
 		}
-		return txtVideoclub;
+		return labelPpal;
+	}
+	private JPanel getPanelAbajoIzq() {
+		if (panelAbajoIzq == null) {
+			panelAbajoIzq = new JPanel();
+			panelAbajoIzq.setBackground(new Color(0, 128, 192));
+			panelAbajoIzq.add(getBotonRegistrarse());
+		}
+		return panelAbajoIzq;
+	}
+	private JPanel getPanelAbajoDer() {
+		if (panelAbajoDer == null) {
+			panelAbajoDer = new JPanel();
+			panelAbajoDer.setBackground(new Color(0, 128, 192));
+			panelAbajoDer.add(getBotonIniciarSesion());
+		}
+		return panelAbajoDer;
+	}
+	private JButton getBotonRegistrarse() {
+		if (botonRegistrarse == null) {
+			botonRegistrarse = new JButton("REGISTRARSE");
+		}
+		return botonRegistrarse;
+	}
+	private JButton getBotonIniciarSesion() {
+		if (botonIniciarSesion == null) {
+			botonIniciarSesion = new JButton("INICIAR SESION");
+			botonIniciarSesion.addActionListener(getControler());
+		}
+		return botonIniciarSesion;
 	}
 }
