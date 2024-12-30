@@ -1,13 +1,13 @@
 package modelo;
 
-public class Reseña
+public class Resena
 {
 	private int idUsuario;
 	private int idPelicula;
 	private float puntuacion;
 	private String comentario;
 	
-	public Reseña(int idUsuario, int idPelicula, float puntuacion, String comentario) {
+	public Resena(int idUsuario, int idPelicula, float puntuacion, String comentario) {
         this.idUsuario = idUsuario;
         this.idPelicula = idPelicula;
         this.puntuacion = puntuacion;
@@ -31,10 +31,10 @@ public class Reseña
         return comentario;
     }
 
-    // Método toString
+    // Mï¿½todo toString
     @Override
     public String toString() {
-        return "Reseña{" +
+        return "Reseï¿½a{" +
                 "idUsuario=" + idUsuario +
                 ", idPelicula=" + idPelicula +
                 ", puntuacion=" + puntuacion +

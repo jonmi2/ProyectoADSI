@@ -8,11 +8,11 @@ public class ConexionMySQL
 	        String url = "jdbc:mysql://localhost:3306/adsibd";
 	        String user = "root"; //Usuario por defecto en XAMPP
 
-	        String password = "";  // Contraseña vacía por defecto en XAMPP
+	        String password = "";  // Contraseï¿½a vacï¿½a por defecto en XAMPP
 
-	        //establecer conexión
+	        //establecer conexiï¿½n
 	        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-	            System.out.println("¡Conexión exitosa a MySQL!");
+	            System.out.println("ï¿½Conexiï¿½n exitosa a MySQL!");
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
