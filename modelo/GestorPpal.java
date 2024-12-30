@@ -19,4 +19,10 @@ public class GestorPpal
 		GestorUsuarios misUsuarios = GestorUsuarios.getGestorUsuarios();
 		misUsuarios.cargarDatos();
 	}
+
+	public boolean puedeIniciarSesion(String pidUsuario) 
+	{
+		GestorUsuarios misUsuarios = GestorUsuarios.getGestorUsuarios();
+		return misUsuarios.puedeIniciarsSesion(pidUsuario);
+	}
 }
