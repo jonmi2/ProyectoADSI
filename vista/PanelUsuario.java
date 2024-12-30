@@ -41,7 +41,7 @@ public class PanelUsuario extends JFrame {
 	private ControlerBotones controler = null;
 	
 	//MODELO
-	 private Usuario usuario;
+	private Usuario usuario;
 
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -132,7 +132,9 @@ public class PanelUsuario extends JFrame {
 	        } else if (e.getSource().equals(getBoton3())) {
 	            System.out.println("Funciona: Botón 3 presionado");
 	        } else if (e.getSource().equals(getListarPersonalizadasButton())) {
-	            System.out.println("Funciona: Listar Personalizadas presionado");
+	            ListaPersonalizadaVista lpv = new ListaPersonalizadaVista(usuario);
+	            setVisible(false);
+	            lpv.setVisible(true);
 	        }
 	    }
 	}
