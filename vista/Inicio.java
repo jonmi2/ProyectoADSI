@@ -64,6 +64,8 @@ public class Inicio extends JFrame {
 	private Inicio() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+		setTitle("Panel principal");
+		
 		panelPpal = new JPanel();
 		panelPpal.setBackground(new Color(0, 128, 192));
 		panelPpal.setForeground(new Color(0, 128, 192));
@@ -94,7 +96,7 @@ public class Inicio extends JFrame {
 			if (e.getSource().equals(getBotonIniciarSesion()))
 			{
 				System.out.println("------------------------------------");
-				System.out.println("Pulsado boton inicio sesión");
+				System.out.println("Pulsado boton inicio sesion");
 				System.out.println("------------------------------------");
 				setVisible(false);
 				IniciarSesion miInicioSesion = IniciarSesion.getIniciarSesion();

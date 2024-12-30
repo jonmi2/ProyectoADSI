@@ -30,9 +30,9 @@ public class GestorUsuarios
 		String url = "jdbc:mysql://localhost:3306/adsibd";
         String user = "root"; //Usuario por defecto en XAMPP
 
-        String password = "";  // Contraseña vacía por defecto en XAMPP
+        String password = "";  // Contraseï¿½a vacï¿½a por defecto en XAMPP
 
-        //establecer conexión
+        //establecer conexiï¿½n
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             System.out.println("Cargar Usuarios");
          // Consulta para obtener todos los usuarios
@@ -50,7 +50,7 @@ public class GestorUsuarios
                     int eliminadoPor = resultSet.getInt("eliminadoPor");
                     int aceptadoPor = resultSet.getInt("aceptadoPor");
 
-                    // Crear listas vacías para susListas y susAlquileres
+                    // Crear listas vacï¿½as para susListas y susAlquileres
                     // ---falta terminar
                     // Estas listas deben llenarse desde otras tablas de la base de datos 
                     ArrayList<ListaPersonalizada> susListas = new ArrayList<>();
@@ -61,8 +61,9 @@ public class GestorUsuarios
                             idUsuario, nombre, email, rol, susListas, susAlquileres, eliminadoPor, aceptadoPor
                     );
 
-                    // Añadir al HashMap (clave: idUsuario, valor: Usuario)
+                    // Aï¿½adir al HashMap (clave: idUsuario, valor: Usuario)
                     usuarios.put(idUsuario, usuario);
+                    System.out.println(usuarios);
                 }
             }
 
@@ -73,7 +74,7 @@ public class GestorUsuarios
                     Usuario usuario = entry.getValue(); // Valor (Usuario)
 
                     System.out.println("ID Usuario: " + idUsuario);
-                    System.out.println(usuario); // Llamará al método toString() de Usuario
+                    System.out.println(usuario); // Llamarï¿½ al mï¿½todo toString() de Usuario
                 }
             
             
@@ -83,58 +84,68 @@ public class GestorUsuarios
 		
 	}
 
-	public boolean puedeIniciarsSesion(String pidUsuario) 
+	public boolean puedeIniciarsSesion(int pidUsuario) 
 	{
-		boolean rdo =false;
+//		boolean rdo = false;
+//		
+//		String url = "jdbc:mysql://localhost:3306/adsibd";
+//        String user = "root"; //Usuario por defecto en XAMPP
+//
+//        String password = "";  // Contraseï¿½a vacï¿½a por defecto en XAMPP
+//
+//        //establecer conexiï¿½n
+//        try (Connection connection = DriverManager.getConnection(url, user, password)) 
+//        {
+//            System.out.println("ï¿½Conexiï¿½n exitosa a MySQL!");
+//         // Consulta SQL para verificar la existencia del usuario y su rol
+//            String query = "SELECT rol FROM Usuario WHERE idUsuario = ?";
+//
+//            try (PreparedStatement statement = connection.prepareStatement(query)) 
+//            {
+//            	// Establecer el parï¿½metro del idUsuario en la consulta
+//                statement.setInt(1, Integer.parseInt(pidUsuario));
+//
+//                // Ejecutar la consulta
+//                try (ResultSet resultSet = statement.executeQuery()) 
+//                {
+//                    // Si se encuentra el usuario
+//                    if (resultSet.next()) 
+//                    {
+//                        String rol = resultSet.getString("rol");
+//                        // Comprobar si el rol es "usuario registrado"
+//                        if ("usuario registrado".equalsIgnoreCase(rol)) 
+//                        {
+//                            rdo= true;
+//                        }
+//                    }
+//                    else
+//                    {
+//                    	rdo= false;
+//                    }            
+//                }                   
+//            } 
+//            catch (Exception e) 
+//            {
+//            	e.printStackTrace();
+//            	rdo = false;
+//            }
+//        } 
+//        catch (SQLException e1) 
+//        {
+//        	rdo=false;
+//        	e1.printStackTrace();
+//        }
+//        
+//        return rdo;
 		
-		String url = "jdbc:mysql://localhost:3306/adsibd";
-        String user = "root"; //Usuario por defecto en XAMPP
-
-        String password = "";  // Contraseña vacía por defecto en XAMPP
-
-        //establecer conexión
-        try (Connection connection = DriverManager.getConnection(url, user, password)) 
-        {
-            System.out.println("¡Conexión exitosa a MySQL!");
-         // Consulta SQL para verificar la existencia del usuario y su rol
-            String query = "SELECT rol FROM Usuario WHERE idUsuario = ?";
-
-            try (PreparedStatement statement = connection.prepareStatement(query)) 
-            {
-            	// Establecer el parámetro del idUsuario en la consulta
-                statement.setInt(1, Integer.parseInt(pidUsuario));
-
-                // Ejecutar la consulta
-                try (ResultSet resultSet = statement.executeQuery()) 
-                {
-                    // Si se encuentra el usuario
-                    if (resultSet.next()) 
-                    {
-                        String rol = resultSet.getString("rol");
-                        // Comprobar si el rol es "usuario registrado"
-                        if ("usuario registrado".equalsIgnoreCase(rol)) 
-                        {
-                            rdo= true;
-                        }
-                    }
-                    else
-                    {
-                    	rdo= false;
-                    }            
-                }                   
-            } 
-            catch (Exception e) 
-            {
-            	e.printStackTrace();
-            	rdo = false;
-            }
-        } 
-        catch (SQLException e1) 
-        {
-        	rdo=false;
-        	e1.printStackTrace();
-        }
-        
-        return rdo;
+		//Como en la vista principal ejecutas la funcion de cargar los datos no hace falta volver a hace runa consulta
+		return usuarios.containsKey(pidUsuario);
+		
 	}
+	
+	
+	public HashMap<Integer, Usuario> getUsuarios() {
+		return this.usuarios;
+	}
+	
 }

@@ -21,6 +21,7 @@ public class IniciarSesion extends JFrame {
 
 	private JPanel panelPpal;
 	private static IniciarSesion miInicioSesion = new IniciarSesion();
+//	private static PanelUsuario miPanelUsuario = new PanelUsuario();
 	private Controler controler = null;
 	private JPanel panelArriba;
 	private JPanel panelAbajo;
@@ -51,6 +52,8 @@ public class IniciarSesion extends JFrame {
 	private IniciarSesion() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+		setTitle("Iniciar sesion");
+		
 		panelPpal = new JPanel();
 		panelPpal.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -81,10 +84,16 @@ public class IniciarSesion extends JFrame {
 				System.out.println("INICIAR SESION");
 				//comprobar si el ID existe y en caso de que exita y que su rol == "usuario registrado" cambiamos a otra pantalla
 				GestorPpal miPpal = GestorPpal.getGestorPpal();
-				if (miPpal.puedeIniciarSesion(fieldIntroducirID.getText()))
+				int pid = Integer.valueOf(fieldIntroducirID.getText());
+				
+				if (miPpal.puedeIniciarSesion(pid))
 				{
 					System.out.println("usuario existe y se puede iniciar sesion");
 					//ahora cambiar de pantalla
+					setVisible(false);
+					
+					PanelUsuario panelUsuario = new PanelUsuario(miPpal.getCurrentUser(pid));
+					panelUsuario.setVisible(true);
 				}
 				else
 				{
@@ -150,7 +159,7 @@ public class IniciarSesion extends JFrame {
 	}
 	private JButton getBotonINICIARSESION() {
 		if (botonINICIARSESION == null) {
-			botonINICIARSESION = new JButton("New button");
+			botonINICIARSESION = new JButton("Login");
 			botonINICIARSESION.addActionListener(getControler());
 		}
 		return botonINICIARSESION;
