@@ -17,10 +17,13 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import modelo.GestorPpal;
 import modelo.Usuario;
 
 public class PanelUsuario extends JFrame {
 	
+	//singleton
+	private static PanelUsuario miPanelUsuarios = new PanelUsuario();
 	
 	//JPANELS
 	private JPanel panelUsuario;
@@ -34,14 +37,19 @@ public class PanelUsuario extends JFrame {
 	//JBUTTONS
 	private JButton boton1;
     private JButton boton2;
-    private JButton boton3;
+    private JButton botonAlqui;
 	private JButton listasPersonalizadasButton;
 	
 	//CONTROLADORES
 	private ControlerBotones controler = null;
 	
 	//MODELO
-	private Usuario usuario;
+	private int idUsuario;
+	
+	public static PanelUsuario getPanelUsuario()
+	{
+		return miPanelUsuarios;
+	}
 
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -56,9 +64,9 @@ public class PanelUsuario extends JFrame {
 //		});
 //	}
 	
-	public PanelUsuario(Usuario usuario) {
+	private PanelUsuario() {
 		
-		this.usuario = usuario;
+		//this.usuario = usuario;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
@@ -108,7 +116,9 @@ public class PanelUsuario extends JFrame {
 	private JLabel getUserNameLabel() {
 		
 		if (nombreUsuario == null) {
-			nombreUsuario = new JLabel(this.usuario.getNombre(), SwingConstants.CENTER); //Aqui necesito el usuario para obtener el nombre
+			GestorPpal miPpal = GestorPpal.getGestorPpal();
+			String nomUsuario = miPpal.buscarNombreUsuario(this.idUsuario);
+			nombreUsuario = new JLabel(nomUsuario, SwingConstants.CENTER); //Aqui necesito el usuario para obtener el nombre
 			nombreUsuario.setForeground(Color.WHITE);
 			nombreUsuario.setFont(new Font("Arial", Font.BOLD, 14));
 			
@@ -129,11 +139,12 @@ public class PanelUsuario extends JFrame {
 	            System.out.println("Funciona: Botón 1 presionado");
 	        } else if (e.getSource().equals(getBoton2())) {
 	            System.out.println("Funciona: Botón 2 presionado");
-	        } else if (e.getSource().equals(getBoton3())) {
+	        } else if (e.getSource().equals(getBotonAlquileres())) {
 	            System.out.println("Funciona: Botón 3 presionado");
 	        } else if (e.getSource().equals(getListarPersonalizadasButton())) {
-	            ListaPersonalizadaVista lpv = new ListaPersonalizadaVista(usuario);
+	            ListaPersonalizadaVista lpv = ListaPersonalizadaVista.getListaPersonalizadaVista();
 	            setVisible(false);
+	            lpv.actualizar(idUsuario);
 	            lpv.setVisible(true);
 	        }
 	    }
@@ -148,7 +159,7 @@ public class PanelUsuario extends JFrame {
             // Agregar botones
         	panelBotones.add(getBoton1());
         	panelBotones.add(getBoton2());
-            panelBotones.add(getBoton3());
+            panelBotones.add(getBotonAlquileres());
             panelBotones.add(getListarPersonalizadasButton());
             
         }
@@ -175,12 +186,12 @@ public class PanelUsuario extends JFrame {
         return boton2;
     }
 
-    private JButton getBoton3() {
-        if (boton3 == null) {
-            boton3 = new JButton("Botón 3");
-            boton3.setPreferredSize(new Dimension(80, 30));
+    private JButton getBotonAlquileres() {
+        if (botonAlqui == null) {
+            botonAlqui = new JButton("Alquiler peliculas (jonmi)");
+            botonAlqui.setPreferredSize(new Dimension(80, 30));
         }
-        return boton3;
+        return botonAlqui;
     }
 	 
    //Crear listas personalizadas
@@ -194,6 +205,10 @@ public class PanelUsuario extends JFrame {
 		
 		return listasPersonalizadasButton;
 		
+	}
+
+	public void actualizar(int pid) {
+		this.idUsuario=pid;
 	}
 
 }

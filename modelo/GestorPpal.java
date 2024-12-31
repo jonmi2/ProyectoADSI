@@ -30,5 +30,10 @@ public class GestorPpal
 		GestorUsuarios misUsuarios = GestorUsuarios.getGestorUsuarios();
 		return misUsuarios.getUsuarios().get(pidUsuario);
 	}
+
+	public String buscarNombreUsuario(int idUsuario) {
+		GestorUsuarios misUsuarios = GestorUsuarios.getGestorUsuarios();
+		return misUsuarios.buscarNombreUsuario(idUsuario);
+	}
 	
 }

@@ -86,66 +86,31 @@ public class GestorUsuarios
 
 	public boolean puedeIniciarsSesion(int pidUsuario) 
 	{
-//		boolean rdo = false;
-//		
-//		String url = "jdbc:mysql://localhost:3306/adsibd";
-//        String user = "root"; //Usuario por defecto en XAMPP
-//
-//        String password = "";  // Contrase�a vac�a por defecto en XAMPP
-//
-//        //establecer conexi�n
-//        try (Connection connection = DriverManager.getConnection(url, user, password)) 
-//        {
-//            System.out.println("�Conexi�n exitosa a MySQL!");
-//         // Consulta SQL para verificar la existencia del usuario y su rol
-//            String query = "SELECT rol FROM Usuario WHERE idUsuario = ?";
-//
-//            try (PreparedStatement statement = connection.prepareStatement(query)) 
-//            {
-//            	// Establecer el par�metro del idUsuario en la consulta
-//                statement.setInt(1, Integer.parseInt(pidUsuario));
-//
-//                // Ejecutar la consulta
-//                try (ResultSet resultSet = statement.executeQuery()) 
-//                {
-//                    // Si se encuentra el usuario
-//                    if (resultSet.next()) 
-//                    {
-//                        String rol = resultSet.getString("rol");
-//                        // Comprobar si el rol es "usuario registrado"
-//                        if ("usuario registrado".equalsIgnoreCase(rol)) 
-//                        {
-//                            rdo= true;
-//                        }
-//                    }
-//                    else
-//                    {
-//                    	rdo= false;
-//                    }            
-//                }                   
-//            } 
-//            catch (Exception e) 
-//            {
-//            	e.printStackTrace();
-//            	rdo = false;
-//            }
-//        } 
-//        catch (SQLException e1) 
-//        {
-//        	rdo=false;
-//        	e1.printStackTrace();
-//        }
-//        
-//        return rdo;
-		
 		//Como en la vista principal ejecutas la funcion de cargar los datos no hace falta volver a hace runa consulta
-		return usuarios.containsKey(pidUsuario);
-		
+		if (usuarios.containsKey(pidUsuario))
+		{
+			if (usuarios.get(pidUsuario).getRol().equals("administrador") || usuarios.get(pidUsuario).getRol().equals("usuario registrado")) 
+			{
+				return true; //solo se puede iniciar sesion en caso de que el usuario exista y su rol sea administrador o usuario registrado
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	
 	public HashMap<Integer, Usuario> getUsuarios() {
 		return this.usuarios;
+	}
+
+	public String buscarNombreUsuario(int idUsuario) {
+		return usuarios.get(idUsuario).getNombre();
 	}
 	
 }

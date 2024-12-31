@@ -33,11 +33,13 @@ public class ListaPersonalizadaVista extends JFrame {
     private JTextField nombreBuscarPelicula;
     
     //Modelo
-    Usuario usuario;
+    private int idUsuario;
+    
+    private static ListaPersonalizadaVista miListaperson = new ListaPersonalizadaVista();
 
-    public ListaPersonalizadaVista(Usuario usuario) {
+    private ListaPersonalizadaVista() {
     	
-    	this.usuario = usuario;
+    	//this.usuario = usuario;
     	
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 600);
@@ -51,6 +53,11 @@ public class ListaPersonalizadaVista extends JFrame {
 
         panelListaPersonalizada.add(getPanelTitulo(), BorderLayout.NORTH);
         panelListaPersonalizada.add(getPanelListas(), BorderLayout.CENTER);
+    }
+    
+    public static ListaPersonalizadaVista getListaPersonalizadaVista()
+    {
+    	return miListaperson;
     }
 
     private JPanel getPanelTitulo() {
@@ -117,7 +124,7 @@ public class ListaPersonalizadaVista extends JFrame {
                 String nombreLista = nombreListaArea.getText().trim();
                 if (!nombreLista.isEmpty()) {
                     ArrayList<Pelicula> tempPeliculas = new ArrayList<>();
-                    ListaPersonalizada lp = new ListaPersonalizada(nombreLista, "privada", usuario.getIdUsuario(), tempPeliculas);
+                    ListaPersonalizada lp = new ListaPersonalizada(nombreLista, "privada", idUsuario, tempPeliculas);
 
                     System.out.println("Lista creada: " + lp.toString()); // Imprimir en consola
 //                    agregarListaAlPanel(nombreLista); // Agregar la lista al panel central
@@ -154,7 +161,7 @@ public class ListaPersonalizadaVista extends JFrame {
         buscarPeliculaPanel.add(nombreBuscarPelicula, BorderLayout.CENTER);
         buscarPeliculaPanel.add(buscarButton, BorderLayout.EAST);
 
-        // Área para mostrar detalles de la película
+        // �rea para mostrar detalles de la película
         JPanel detallesPeliculaPanel = new JPanel(new BorderLayout(10, 10));
         JLabel detallesLabel = new JLabel("Detalles de la película:");
         detallesLabel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -247,6 +254,11 @@ public class ListaPersonalizadaVista extends JFrame {
         panelListas.revalidate(); // Actualizar el panel
         panelListas.repaint();   // Redibujar el panel
     }
+
+	public void actualizar(int idUsuario2) {
+		this.idUsuario=idUsuario2;
+		
+	}
 
 }
 
