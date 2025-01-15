@@ -24,63 +24,77 @@ public class GestorUsuarios
 		return misUsuarios;
 	}
 
-	public void cargarDatos() {
-		// metodo para cargar los datos de la base de datos
-		
-		String url = "jdbc:mysql://localhost:3306/adsibd";
-        String user = "root"; //Usuario por defecto en XAMPP
+	public void cargarDatos()
+	{
+		GestorBD gestorBD = GestorBD.getGestorBD(); // Obtener la instancia del Singleton
+	    String query = "SELECT * FROM Usuario"; // Consulta para obtener todos los usuarios
 
-        String password = "";  // Contraseï¿½a vacï¿½a por defecto en XAMPP
+	    try 
+	    {
+	        ResultadoSQL resultado = gestorBD.consultaSQL(query); // Ejecutar la consulta SQL
 
-        //establecer conexiï¿½n
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            System.out.println("Cargar Usuarios");
-         // Consulta para obtener todos los usuarios
-            String query = "SELECT * FROM Usuario";
-            try (PreparedStatement statement = connection.prepareStatement(query);
-                 ResultSet resultSet = statement.executeQuery()) {
+	        // Recorrer los resultados
+	        while (resultado.next()) {
+	            // Leer los datos de la fila actual
+	            int idUsuario = Integer.parseInt(resultado.getString("idUsuario"));
+	            String nombre = resultado.getString("nombre");
+	            String email = resultado.getString("email");
+	            String rol = resultado.getString("rol");
+	            
+	            int aceptadoPor;
+	            int eliminadoPor;
+	            
+	            String eliminadoPorStr = resultado.getString("eliminadoPor");
+	            if (eliminadoPorStr == null || eliminadoPorStr.isEmpty()) 
+	            {
+	                //caso en el que "eliminadoPor" sea null en la BD
+	            	eliminadoPor=0;
+	            } 
+	            else 
+	            {
+	                eliminadoPor = Integer.parseInt(eliminadoPorStr);            
+	            }
 
-                // Recorrer los resultados
-                while (resultSet.next()) {
-                    // Leer los datos de la fila actual
-                    int idUsuario = resultSet.getInt("idUsuario");
-                    String nombre = resultSet.getString("nombre");
-                    String email = resultSet.getString("email");
-                    String rol = resultSet.getString("rol");
-                    int eliminadoPor = resultSet.getInt("eliminadoPor");
-                    int aceptadoPor = resultSet.getInt("aceptadoPor");
+	            String aceptadoPorStr = resultado.getString("aceptadoPor");
+	            if (aceptadoPorStr == null || aceptadoPorStr.isEmpty()) 
+	            {
+	                //caso en el que "aceptadoPorStr" sea null en la BD
+	            	aceptadoPor=0;
+	            } 
+	            else 
+	            {
+	                aceptadoPor = Integer.parseInt(aceptadoPorStr);            
+	            }
 
-                    // Crear listas vacï¿½as para susListas y susAlquileres
-                    // ---falta terminar
-                    // Estas listas deben llenarse desde otras tablas de la base de datos 
-                    ArrayList<ListaPersonalizada> susListas = new ArrayList<>();
-                    ArrayList<Alquiler> susAlquileres = new ArrayList<>();
+	            // Crear listas vacías para susListas y susAlquileres
+	            ArrayList<ListaPersonalizada> susListas = new ArrayList<>();
+	            ArrayList<Alquiler> susAlquileres = new ArrayList<>();
 
-                    // Crear el objeto Usuario
-                    Usuario usuario = new Usuario(
-                            idUsuario, nombre, email, rol, susListas, susAlquileres, eliminadoPor, aceptadoPor
-                    );
+	            // Crear el objeto Usuario
+	            Usuario usuario = new Usuario(
+	                    idUsuario, nombre, email, rol, susListas, susAlquileres, eliminadoPor, aceptadoPor
+	            );
 
-                    // Aï¿½adir al HashMap (clave: idUsuario, valor: Usuario)
-                    usuarios.put(idUsuario, usuario);
-                    System.out.println(usuarios);
-                }
-            }
+	            // Añadir al HashMap (clave: idUsuario, valor: Usuario)
+	            usuarios.put(idUsuario, usuario);
+	        }
 
-            System.out.println("Usuarios cargados exitosamente.");
-          //IMPRIMIR USUARIOS PARA COMPROBAR-- ESTO LO QUITAMOS LUEGO
-                for (Entry<Integer, Usuario> entry : usuarios.entrySet()) {
-                    Integer idUsuario = entry.getKey(); // Clave (idUsuario)
-                    Usuario usuario = entry.getValue(); // Valor (Usuario)
+	        System.out.println("Usuarios cargados exitosamente.");
 
-                    System.out.println("ID Usuario: " + idUsuario);
-                    System.out.println(usuario); // Llamarï¿½ al mï¿½todo toString() de Usuario
-                }
-            
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	        // Imprimir usuarios para comprobar (esto puede eliminarse más adelante)
+	        for (Entry<Integer, Usuario> entry : usuarios.entrySet()) {
+	            Integer idUsuario = entry.getKey();
+	            Usuario usuario = entry.getValue();
+	            System.out.println("ID Usuario: " + idUsuario);
+	            System.out.println(usuario); // Asume que la clase Usuario tiene un método toString()
+	        }
+
+	    } 
+	    catch (Exception e) 
+	    {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error cargando los usuarios desde la base de datos.", e);
+	    }
 		
 	}
 
@@ -89,7 +103,7 @@ public class GestorUsuarios
 		//Como en la vista principal ejecutas la funcion de cargar los datos no hace falta volver a hace runa consulta
 		if (usuarios.containsKey(pidUsuario))
 		{
-			if (usuarios.get(pidUsuario).getRol().equals("administrador") || usuarios.get(pidUsuario).getRol().equals("usuario registrado")) 
+			if (usuarios.get(pidUsuario).getRol().equals("admin") || usuarios.get(pidUsuario).getRol().equals("usuario registrado")) 
 			{
 				return true; //solo se puede iniciar sesion en caso de que el usuario exista y su rol sea administrador o usuario registrado
 			}
@@ -110,7 +124,20 @@ public class GestorUsuarios
 	}
 
 	public String buscarNombreUsuario(int idUsuario) {
-		return usuarios.get(idUsuario).getNombre();
+		// Imprimir usuarios para comprobar (esto puede eliminarse más adelante)
+		System.out.println("IMPRIMIR DND DA ERROR");
+		System.out.println("IMPRIMIR ID POR PARAMETRO"+idUsuario); 
+		for (Entry<Integer, Usuario> entry : usuarios.entrySet()) {
+            Integer idU = entry.getKey();
+            Usuario usuario = entry.getValue();
+            System.out.println("ID Usuario: " + idU);
+        }
+        
+        return usuarios.get(idUsuario).getNombre();
+	}
+
+	public String getRolUsuario(int pid) {
+		return usuarios.get(pid).getRol();
 	}
 	
 }

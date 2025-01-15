@@ -45,6 +45,7 @@ public class PanelUsuario extends JFrame {
 	
 	//MODELO
 	private int idUsuario;
+	private String rol;
 	
 	public static PanelUsuario getPanelUsuario()
 	{
@@ -117,7 +118,8 @@ public class PanelUsuario extends JFrame {
 		
 		if (nombreUsuario == null) {
 			GestorPpal miPpal = GestorPpal.getGestorPpal();
-			String nomUsuario = miPpal.buscarNombreUsuario(this.idUsuario);
+			//String nomUsuario = miPpal.buscarNombreUsuario(this.idUsuario);
+			String nomUsuario = "prueba, creo q las vistas no tienen q ser singleton";
 			nombreUsuario = new JLabel(nomUsuario, SwingConstants.CENTER); //Aqui necesito el usuario para obtener el nombre
 			nombreUsuario.setForeground(Color.WHITE);
 			nombreUsuario.setFont(new Font("Arial", Font.BOLD, 14));
@@ -134,14 +136,21 @@ public class PanelUsuario extends JFrame {
 	private class ControlerBotones implements ActionListener {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-	        // Identificar qué botón fue presionado y mostrar el mensaje correspondiente en consola
-	        if (e.getSource().equals(getBoton1())) {
-	            System.out.println("Funciona: Botón 1 presionado");
-	        } else if (e.getSource().equals(getBoton2())) {
-	            System.out.println("Funciona: Botón 2 presionado");
-	        } else if (e.getSource().equals(getBotonAlquileres())) {
-	            System.out.println("Funciona: Botón 3 presionado");
-	        } else if (e.getSource().equals(getListarPersonalizadasButton())) {
+	        // Identificar qeu boton fue presionado y mostrar el mensaje correspondiente en consola
+	        if (e.getSource().equals(getBoton1())) 
+	        {
+	            System.out.println("Funciona: Boton 1 presionado");
+	        } 
+	        else if (e.getSource().equals(getBoton2())) 
+	        {
+	            System.out.println("Funciona: Boton 2 presionado");
+	        } 
+	        else if (e.getSource().equals(getBotonAlquileres())) 
+	        {
+	            System.out.println("Funciona: Boton 3 presionado");
+	        } 
+	        else if (e.getSource().equals(getListarPersonalizadasButton())) 
+	        {
 	            ListaPersonalizadaVista lpv = ListaPersonalizadaVista.getListaPersonalizadaVista();
 	            setVisible(false);
 	            lpv.actualizar(idUsuario);
@@ -207,8 +216,9 @@ public class PanelUsuario extends JFrame {
 		
 	}
 
-	public void actualizar(int pid) {
+	public void actualizar(int pid, String rol) {
 		this.idUsuario=pid;
+		this.rol=rol;
 	}
 
 }

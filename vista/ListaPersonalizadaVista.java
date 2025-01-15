@@ -64,15 +64,15 @@ public class ListaPersonalizadaVista extends JFrame {
         if (panelTitulo == null) {
             panelTitulo = new JPanel();
             panelTitulo.setLayout(new BorderLayout());
-            panelTitulo.setPreferredSize(new Dimension(800, 60)); // Tamaño preferido
+            panelTitulo.setPreferredSize(new Dimension(800, 60)); // Tamano preferido
             panelTitulo.setBackground(Color.LIGHT_GRAY);
 
-            // Configurar el título
+            // Configurar el titulo
             tituloLabel = new JLabel("Listas Personalizadas", SwingConstants.CENTER);
             tituloLabel.setFont(new Font("Arial", Font.BOLD, 20));
             panelTitulo.add(tituloLabel, BorderLayout.CENTER);
 
-            // Configurar el botón para crear una lista
+            // Configurar el boton para crear una lista
             crearListaButton = new JButton("Crear Lista");
             crearListaButton.setPreferredSize(new Dimension(120, 40));
             crearListaButton.addActionListener(new ActionListener() {
@@ -104,7 +104,7 @@ public class ListaPersonalizadaVista extends JFrame {
     
     
     private void mostrarEntradaNombreLista() {
-        // Panel principal para el diálogo
+        // Panel principal para el dialogo
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS)); // Layout vertical
         inputPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -129,7 +129,7 @@ public class ListaPersonalizadaVista extends JFrame {
                     System.out.println("Lista creada: " + lp.toString()); // Imprimir en consola
 //                    agregarListaAlPanel(nombreLista); // Agregar la lista al panel central
                 } else {
-                    JOptionPane.showMessageDialog(null, "El nombre de la lista no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "El nombre de la lista no puede estar vacio.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -138,12 +138,12 @@ public class ListaPersonalizadaVista extends JFrame {
         nombreListaPanel.add(scrollPaneNombreLista, BorderLayout.CENTER);
         nombreListaPanel.add(confirmarButton, BorderLayout.EAST);
 
-     // Entrada para buscar película
+     // Entrada para buscar pelicula
         JPanel buscarPeliculaPanel = new JPanel(new BorderLayout(10, 10));
-        JLabel buscarLabel = new JLabel("Buscar película:");
+        JLabel buscarLabel = new JLabel("Buscar pelicula:");
         buscarLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        nombreBuscarPelicula = new JTextField(20); // Campo de texto para buscar películas
+        nombreBuscarPelicula = new JTextField(20); // Campo de texto para buscar peliculas
         JButton buscarButton = new JButton("Buscar");
         buscarButton.addActionListener(new ActionListener() {
 
@@ -161,12 +161,12 @@ public class ListaPersonalizadaVista extends JFrame {
         buscarPeliculaPanel.add(nombreBuscarPelicula, BorderLayout.CENTER);
         buscarPeliculaPanel.add(buscarButton, BorderLayout.EAST);
 
-        // �rea para mostrar detalles de la película
+        // area para mostrar detalles de la pelicula
         JPanel detallesPeliculaPanel = new JPanel(new BorderLayout(10, 10));
-        JLabel detallesLabel = new JLabel("Detalles de la película:");
+        JLabel detallesLabel = new JLabel("Detalles de la pelicula:");
         detallesLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        // Panel para los botones de las películas
+        // Panel para los botones de las peliculas
         panelBotonesPeliculas = new JPanel();
         panelBotonesPeliculas.setLayout(new GridLayout (0, 3, 10, 10)); // Centrado y espaciado entre botones
 
@@ -174,9 +174,9 @@ public class ListaPersonalizadaVista extends JFrame {
 	     JScrollPane scrollPane = new JScrollPane(panelBotonesPeliculas); 
 	     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);// Barra de desplazamiento vertical siempre
-	     scrollPane.setPreferredSize(new Dimension(500, 400)); // Tamaño preferido para el scroll
+	     scrollPane.setPreferredSize(new Dimension(500, 400)); // Tamano preferido para el scroll
 	
-	     // Reemplazar la adición de panelBotonesPeliculas directamente al detallesPeliculaPanel
+	     // Reemplazar la adicion de panelBotonesPeliculas directamente al detallesPeliculaPanel
 	     detallesPeliculaPanel.add(scrollPane, BorderLayout.CENTER);
 
         // Agregar los paneles al panel principal
@@ -186,41 +186,41 @@ public class ListaPersonalizadaVista extends JFrame {
         inputPanel.add(Box.createVerticalStrut(10)); // Espaciado entre componentes
         inputPanel.add(detallesPeliculaPanel); // Agregar el panel de detalles
 
-        // Mostrar el cuadro de diálogo
-        JOptionPane.showMessageDialog(this, inputPanel, "Crear Lista y Buscar Película", JOptionPane.PLAIN_MESSAGE);
+        // Mostrar el cuadro de dialogo
+        JOptionPane.showMessageDialog(this, inputPanel, "Crear Lista y Buscar Pelicula", JOptionPane.PLAIN_MESSAGE);
     }
     
     private void mostrarBotonesConNombresPeliculas(List<String> infoPeliculas) {
     	panelBotonesPeliculas.removeAll();
 
-        // Generar botones para las películas encontradas
+        // Generar botones para las peliculas encontradas
         for (String p : infoPeliculas) {
             
         	JLabel labelPelicula = new JLabel(p);
             labelPelicula.setFont(new Font("Arial", Font.PLAIN, 12));
             labelPelicula.setHorizontalAlignment(SwingConstants.CENTER);
             labelPelicula.setVerticalAlignment(SwingConstants.CENTER);
-            labelPelicula.setPreferredSize(new Dimension(150, 50)); // Tamaño de los botones
+            labelPelicula.setPreferredSize(new Dimension(150, 50)); // Tamano de los botones
 
             // Crear un JButton con el JLabel como contenido
             JButton botonPelicula = new JButton();
             botonPelicula.setLayout(new BorderLayout());
             botonPelicula.add(labelPelicula, BorderLayout.CENTER);
-            botonPelicula.setPreferredSize(new Dimension(150, 50)); // Tamaño de los botones
+            botonPelicula.setPreferredSize(new Dimension(150, 50)); // Tamano de los botones
 
-            // Configurar el botón para que no se corte el texto y se ajuste a múltiples líneas
+            // Configurar el boton para que no se corte el texto y se ajuste a multiples lineas
             labelPelicula.setText("<html>" + p.replaceAll("\n", "<br>") + "</html>");
         	
             botonPelicula.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Acción cuando el usuario hace clic en un botón
+                    // Accion cuando el usuario hace clic en un boton
                     System.out.println("Película seleccionada: " + p);
                 }
             });
             
             botonPelicula.setPreferredSize(new Dimension(70, 30));
-            panelBotonesPeliculas.add(botonPelicula); // Agregar el botón al panel
+            panelBotonesPeliculas.add(botonPelicula); // Agregar el boton al panel
         }
 
         // Refrescar la vista para que los nuevos botones aparezcan
@@ -243,7 +243,7 @@ public class ListaPersonalizadaVista extends JFrame {
         JTextArea detallesArea = new JTextArea();
         detallesArea.setEditable(false);
         detallesArea.setFont(new Font("Arial", Font.PLAIN, 14));
-        detallesArea.setText("Descripción: " + descripcion + "\nPelículas: " + String.join(", ", peliculas));
+        detallesArea.setText("Descripcion: " + descripcion + "\nPeliculas: " + String.join(", ", peliculas));
         detallesArea.setBackground(Color.LIGHT_GRAY);
         detallesArea.setBorder(null);
 

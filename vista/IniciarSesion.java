@@ -82,22 +82,20 @@ public class IniciarSesion extends JFrame {
 			if (e.getSource().equals(getBotonINICIARSESION()))
 			{
 				System.out.println("INICIAR SESION");
-				//comprobar si el ID existe y en caso de que exita y que su rol == "usuario registrado" cambiamos a otra pantalla
+				//comprobar si el ID existe y en caso de que exita y que su rol == "usuario registrado" o "admin" cambiamos a otra pantalla
 				GestorPpal miPpal = GestorPpal.getGestorPpal();
-				int pid = Integer.valueOf(fieldIntroducirID.getText());
+				Integer pid = Integer.valueOf(fieldIntroducirID.getText());
 				
 				if (miPpal.puedeIniciarSesion(pid))
 				{
 					System.out.println("usuario existe y se puede iniciar sesion");
 					//ahora cambiar de pantalla
-					
+					String rol = GestorPpal.getGestorPpal().getRolUsuario(pid);
 					
 					PanelUsuario miPanelUsuario = PanelUsuario.getPanelUsuario();
-					miPanelUsuario.actualizar(pid);
+					miPanelUsuario.actualizar(pid,rol);
 					miPanelUsuario.setVisible(true);
-					setVisible(false);
-					//PanelUsuario panelUsuario = panelUsuario.getPanelUsuario();
-					//panelUsuario.setVisible(true);
+					setVisible(false);				
 				}
 				else
 				{

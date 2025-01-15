@@ -18,6 +18,8 @@ public class GestorPpal
 		// metodo para cargar los datos de la base de datos
 		GestorUsuarios misUsuarios = GestorUsuarios.getGestorUsuarios();
 		misUsuarios.cargarDatos();
+		
+		//hay que hacerlo con todos los datos, no solo con los usuarios
 	}
 
 	public boolean puedeIniciarSesion(int pidUsuario) 
@@ -34,6 +36,11 @@ public class GestorPpal
 	public String buscarNombreUsuario(int idUsuario) {
 		GestorUsuarios misUsuarios = GestorUsuarios.getGestorUsuarios();
 		return misUsuarios.buscarNombreUsuario(idUsuario);
+	}
+
+	public String getRolUsuario(int pid) 
+	{
+		return GestorUsuarios.getGestorUsuarios().getRolUsuario(pid);
 	}
 	
 }
