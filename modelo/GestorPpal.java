@@ -42,5 +42,19 @@ public class GestorPpal
 	{
 		return GestorUsuarios.getGestorUsuarios().getRolUsuario(pid);
 	}
+
+	public JSON1 buscarInfoPeli(String peliAbuscar) 
+	{
+		GestorPeliculas miGestorPelis = GestorPeliculas.getGestorPelis();
+		if(miGestorPelis.buscarInfoPeli(peliAbuscar)==null)
+		{
+			System.out.println("Gestor pelis nos devuelve un JSON1 null");
+			return null;
+		}
+		else
+		{
+			return miGestorPelis.buscarInfoPeli(peliAbuscar);
+		}
+	}
 	
 }

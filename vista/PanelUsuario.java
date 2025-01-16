@@ -147,7 +147,10 @@ public class PanelUsuario extends JFrame {
 	        } 
 	        else if (e.getSource().equals(getBotonAlquileres())) 
 	        {
-	            System.out.println("Funciona: Boton 3 presionado");
+	            System.out.println("Funciona: Boton alquileres presionado");
+	            AlquilerPeliculas miAlquilerPeliculas = AlquilerPeliculas.getAlquilerPeliculas();
+	            setVisible(false);
+	            miAlquilerPeliculas.setVisible(true);
 	        } 
 	        else if (e.getSource().equals(getListarPersonalizadasButton())) 
 	        {
@@ -199,6 +202,7 @@ public class PanelUsuario extends JFrame {
         if (botonAlqui == null) {
             botonAlqui = new JButton("Alquiler peliculas (jonmi)");
             botonAlqui.setPreferredSize(new Dimension(80, 30));
+            botonAlqui.addActionListener(getControler());
         }
         return botonAlqui;
     }
