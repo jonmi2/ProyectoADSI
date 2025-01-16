@@ -11,12 +11,13 @@ public class Usuario {
     private String rol;
     private ArrayList<ListaPersonalizada> susListas; 
     private ArrayList<Alquiler> susAlquileres; 
+    private ArrayList<Resena> susResenas;
     private int eliminadoPor;
     private int aceptadoPor;
 
 
     // Constructora
-    public Usuario(int idUsuario, String nombre, String email, String rol, ArrayList<ListaPersonalizada> susListas, ArrayList<Alquiler> susAlquileres, int eliminadoPor, int aceptadoPor) 
+    public Usuario(int idUsuario, String nombre, String email, String rol, ArrayList<ListaPersonalizada> susListas,ArrayList<Resena> susResenas, ArrayList<Alquiler> susAlquileres, int eliminadoPor, int aceptadoPor) 
     {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
@@ -26,6 +27,7 @@ public class Usuario {
         this.susAlquileres = susAlquileres;
         this.eliminadoPor = eliminadoPor;
         this.aceptadoPor = aceptadoPor;
+        this.susResenas = susResenas;
     }
 
     // Getters
@@ -61,9 +63,32 @@ public class Usuario {
     public int getAceptadoPor() {
         return aceptadoPor;
     }
+    
+    public ArrayList<Resena> getSusResenas() {
+        return susResenas;
+    }
+    public void agregarResena(Resena resena) {
+        if (resena != null) {
+        	if (!estaResena(resena)) {
+        		susResenas.add(resena);
+        	}
+        	else {
+        		System.out.println("La reseña ya existe");
+        	}
+        }
+    }
+    public void eliminarReseña(Resena resena) {
+        susResenas.remove(resena);
+    }
+
+    private boolean estaResena(Resena resena) {
+        return susResenas.contains(resena);
+    }
 
 
-    // M�todo toString para imprimir la clase
+
+
+    // M�todo toString para imprimir la clase
     @Override
     public String toString() {
         return "Usuario{" +
@@ -73,6 +98,7 @@ public class Usuario {
                 ", rol='" + rol + '\'' +
                 ", susListas=" + susListas +
                 ", susAlquileres=" + susAlquileres +
+                ", susReseñas=" + susResenas +
                 ", eliminadoPor=" + eliminadoPor +
                 ", aceptadoPor=" + aceptadoPor +
                 '}';
