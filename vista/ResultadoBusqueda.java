@@ -29,6 +29,7 @@ public class ResultadoBusqueda extends JFrame {
 	private JLabel lblInfo;
 	private JButton botonResenas;
 	private Controler controler = null;
+	private JButton botonAtras;
 
 	/**
 	 * Launch the application.
@@ -78,7 +79,18 @@ public class ResultadoBusqueda extends JFrame {
 					else
 					{
 						System.out.println("vamos a ver resenas!!!!");
+						ResenasVista misResenas = ResenasVista.getResenasVista();
+						setVisible(false);
+						misResenas.setVisible(true);
 					}							
+				}
+				
+				if (e.getSource().equals(botonAtras))
+				{
+					System.out.println("volvemos patras");
+					AlquilerPeliculas vistaAlquiP = AlquilerPeliculas.getAlquilerPeliculas();
+					setVisible(false);
+					vistaAlquiP.setVisible(true);
 				}
 			}
 
@@ -101,7 +113,9 @@ public class ResultadoBusqueda extends JFrame {
 	private JPanel getPanelVerResenas() {
 		if (panelVerResenas == null) {
 			panelVerResenas = new JPanel();
+			panelVerResenas.setLayout(new GridLayout(1, 2, 0, 0));
 			panelVerResenas.add(getBotonResenas());
+			panelVerResenas.add(getBotonAtras());
 		}
 		return panelVerResenas;
 	}
@@ -154,6 +168,7 @@ public class ResultadoBusqueda extends JFrame {
 		}
 		else
 		{
+			this.botonResenas.setText("Quieres ver las resenas de la peli?");
 			int anioP = peliculaJson.getAnioP();
 			int idP = peliculaJson.getIdP();
 			String nomP = peliculaJson.getNombreP();
@@ -166,4 +181,11 @@ public class ResultadoBusqueda extends JFrame {
 	}
 
 
+	private JButton getBotonAtras() {
+		if (botonAtras == null) {
+			botonAtras = new JButton("Atras");
+			botonAtras.addActionListener(getControler());
+		}
+		return botonAtras;
+	}
 }

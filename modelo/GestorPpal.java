@@ -19,6 +19,9 @@ public class GestorPpal
 		GestorUsuarios misUsuarios = GestorUsuarios.getGestorUsuarios();
 		misUsuarios.cargarDatos();
 		
+		GestorPeliculas misPelis = GestorPeliculas.getGestorPelis();
+		misPelis.cargarDatos();
+		
 		//hay que hacerlo con todos los datos, no solo con los usuarios
 	}
 
