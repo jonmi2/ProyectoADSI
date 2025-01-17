@@ -69,6 +69,14 @@ public class Pelicula {
         	susResenas.add(resena);
         }
     }
+    public boolean tieneResena(int idUsuario){
+    	for (Resena resena : susResenas) {
+            if (resena.getIdUsuario() == idUsuario) { 
+            	return true;
+            }
+    	}
+    	return false;
+    }
 
     // M�todo toString para imprimir la clase
     @Override
