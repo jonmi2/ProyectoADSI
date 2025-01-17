@@ -77,7 +77,7 @@ public class Usuario {
         	}
         }
     }
-    public void eliminarReseña(Resena resena) {
+    public void eliminarResena(Resena resena) {
         susResenas.remove(resena);
     }
 
