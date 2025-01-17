@@ -11,11 +11,12 @@ public class Pelicula {
     private int anio;
     private float puntuacionMedia;
     private ArrayList<ListaPersonalizada> perteneceA; 
+    private ArrayList<Resena> susResenas;
     private int quienLaHaAceptado;
 
     // Constructor
     public Pelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
-                    float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, int quienLaHaAceptado) {
+                    float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, ArrayList<Resena> lresenas, int quienLaHaAceptado) {
         this.idPelicula = idPelicula;
         this.titulo = titulo;
         this.reparto = reparto;
@@ -23,6 +24,7 @@ public class Pelicula {
         this.puntuacionMedia = puntuacionMedia;
         this.perteneceA = perteneceA;
         this.quienLaHaAceptado = quienLaHaAceptado;
+        this.susResenas = lresenas;
     }
 
     // Getters
@@ -45,7 +47,15 @@ public class Pelicula {
     public float getPuntuacionMedia() {
         return puntuacionMedia;
     }
-
+    
+    public ArrayList<Resena> getSusResenas() {
+        return susResenas;
+    }
+    
+    public void eliminarResena(Resena resena) {
+        susResenas.remove(resena);
+    }
+    
     public ArrayList<ListaPersonalizada> getPerteneceA() {
         return perteneceA;
     }
@@ -53,8 +63,22 @@ public class Pelicula {
     public int getQuienLaHaAceptado() {
         return quienLaHaAceptado;
     }
+    public void agregarResena(Resena resena) {
+        if (resena != null) {
+        	
+        	susResenas.add(resena);
+        }
+    }
+    public boolean tieneResena(int idUsuario){
+    	for (Resena resena : susResenas) {
+            if (resena.getIdUsuario() == idUsuario) { 
+            	return true;
+            }
+    	}
+    	return false;
+    }
 
-    // Método toString para imprimir la clase
+    // Mï¿½todo toString para imprimir la clase
     @Override
     public String toString() {
         return "Pelicula{" +
@@ -65,6 +89,7 @@ public class Pelicula {
                 ", puntuacionMedia=" + puntuacionMedia +
                 ", perteneceA=" + perteneceA +
                 ", quienLaHaAceptado=" + quienLaHaAceptado +
+                ", susReseÃ±as=" + susResenas +
                 '}';
     }
 }
