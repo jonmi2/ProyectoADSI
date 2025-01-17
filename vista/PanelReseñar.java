@@ -105,6 +105,12 @@ public class PanelReseñar extends JFrame {
 		textField_1.setBounds(127, 124, 419, 20);
 		contentPane.add(textField_1);
 	}
+	public void setPanelReseñar(int idUsNuevo, int idPeliNuevo, String nomPeliNuevo) {
+		this.idPeli = idPeliNuevo;
+		this.idUsuario = idUsNuevo;
+		this.nombrePeli = nomPeliNuevo;
+		
+	}
 	private JButton getBotonReseña() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("Login");
