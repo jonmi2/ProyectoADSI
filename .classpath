@@ -7,10 +7,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/mikel/Desktop/UNI/UNI/Análisis y Diseño de Sistemas de Información/proyecto/mysql-connector-j-9.1.0/mysql-connector-j-9.1.0.jar">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/mikel/Downloads/sqlite-jdbc-3.48.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

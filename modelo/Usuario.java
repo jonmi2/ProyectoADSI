@@ -17,7 +17,15 @@ public class Usuario {
 
 
     // Constructora
-    public Usuario(int idUsuario, String nombre, String email, String rol, ArrayList<ListaPersonalizada> susListas, ArrayList<Alquiler> susAlquileres, int eliminadoPor, int aceptadoPor) 
+    public Usuario(
+    		int idUsuario, 
+    		String nombre, 
+    		String email, 
+    		String rol, 
+    		ArrayList<ListaPersonalizada> susListas, 
+    		ArrayList<Alquiler> susAlquileres, 
+    		int eliminadoPor, 
+    		int aceptadoPor) 
     {
         this.idUsuario = idUsuario;
         this.nombre = nombre;

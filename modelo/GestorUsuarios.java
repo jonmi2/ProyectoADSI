@@ -66,28 +66,28 @@ public class GestorUsuarios
 	                aceptadoPor = Integer.parseInt(aceptadoPorStr);            
 	            }
 
-	            // Crear listas vacías para susListas y susAlquileres
+	            // Crear listas vacï¿½as para susListas y susAlquileres
 	            ArrayList<ListaPersonalizada> susListas = new ArrayList<>();
 	            ArrayList<Alquiler> susAlquileres = new ArrayList<>();
 	            ArrayList<Resena> susResenas = new ArrayList<>();
 
 	            // Crear el objeto Usuario
 	            Usuario usuario = new Usuario(
-	                    idUsuario, nombre, email, rol, susListas, susResenas, susAlquileres, eliminadoPor, aceptadoPor
+	                    idUsuario, nombre, email, rol, susListas, susAlquileres, eliminadoPor, aceptadoPor
 	            );
 
-	            // Añadir al HashMap (clave: idUsuario, valor: Usuario)
+	            // Aï¿½adir al HashMap (clave: idUsuario, valor: Usuario)
 	            usuarios.put(idUsuario, usuario);
 	        }
 
 	        System.out.println("Usuarios cargados exitosamente.");
 
-	        // Imprimir usuarios para comprobar (esto puede eliminarse más adelante)
+	        // Imprimir usuarios para comprobar (esto puede eliminarse mï¿½s adelante)
 	        for (Entry<Integer, Usuario> entry : usuarios.entrySet()) {
 	            Integer idUsuario = entry.getKey();
 	            Usuario usuario = entry.getValue();
 	            System.out.println("ID Usuario: " + idUsuario);
-	            System.out.println(usuario); // Asume que la clase Usuario tiene un método toString()
+	            System.out.println(usuario); // Asume que la clase Usuario tiene un mï¿½todo toString()
 	        }
 
 	    } 
@@ -129,7 +129,7 @@ public class GestorUsuarios
 	}
 
 	public String buscarNombreUsuario(int idUsuario) {
-		// Imprimir usuarios para comprobar (esto puede eliminarse más adelante)
+		// Imprimir usuarios para comprobar (esto puede eliminarse mï¿½s adelante)
 		System.out.println("IMPRIMIR DND DA ERROR");
 		System.out.println("IMPRIMIR ID POR PARAMETRO"+idUsuario); 
 		for (Entry<Integer, Usuario> entry : usuarios.entrySet()) {

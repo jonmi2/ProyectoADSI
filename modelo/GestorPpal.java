@@ -22,7 +22,7 @@ public class GestorPpal
 		misUsuarios.cargarDatos();
 		
 		GestorPeliculas misPelis = GestorPeliculas.getGestorPelis();
-		misPelis.cargarDatos();
+//		misPelis.cargarDatos();
 		
 		//hay que hacerlo con todos los datos, no solo con los usuarios
 	}
@@ -62,11 +62,11 @@ public class GestorPpal
 		}
 	}
 	
-	public void añadirPelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
+	public void anadirPelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
                     float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, ArrayList<Resena> lresenas, int quienLaHaAceptado) 
 	{
 		GestorPeliculas miGestorPelis = GestorPeliculas.getGestorPelis();
-		miGestorPelis.añadirPelicula(idPelicula, titulo, reparto, anio, puntuacionMedia, perteneceA, lresenas, quienLaHaAceptado);
+		miGestorPelis.anadirPelicula(idPelicula, titulo, reparto, anio, puntuacionMedia, perteneceA, lresenas, quienLaHaAceptado);
 	}
 	
 }

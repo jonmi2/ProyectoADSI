@@ -10,7 +10,7 @@ import java.sql.*;
 public class GestorBD 
 {	
 	private static GestorBD miGestorBD = new GestorBD();
-	private static final String URL = "jdbc:sqlite:test.db"; // Cambiar por la ruta de tu archivo SQLite
+	private static final String URL = "jdbc:sqlite:adsidb.db"; // Cambiar por la ruta de tu archivo SQLite
 	
 	private GestorBD() { }
 	
@@ -61,7 +61,7 @@ public class GestorBD
 		}
 	}
 	
-	// Método para inicializar la base de datos
+	// Mï¿½todo para inicializar la base de datos
 	public void inicializarBaseDeDatos() 
 	{
 	    try (Connection conn = DriverManager.getConnection(this.URL)) 
@@ -88,6 +88,15 @@ public class GestorBD
 	                        "FOREIGN KEY (aceptadoPor) REFERENCES Usuario(idUsuario)" +
 	                        ");";
 	                execSQL(createUsuarioTable);
+	                
+	                String admin = "INSERT INTO Usuario (" +
+	                        "idUsuario, nombre, email, rol, eliminadoPor, aceptadoPor" +
+	                        ") VALUES (" +
+	                        "1, 'Admin', 'admin@example.com', 'admin', NULL, NULL" +
+	                        ");";
+	                execSQL(admin);
+
+	                
 	                
 	                // Crear la tabla 'Pelicula'
 	                String createPeliculaTable = "CREATE TABLE Pelicula (" +
@@ -161,20 +170,20 @@ public class GestorBD
 	                {
 	                    int peliculaCount = Integer.parseInt(resultadoPelicula.getString("count"));
 	                    
-	                    // Si ambas tablas están vacías, insertar los datos iniciales
+	                    // Si ambas tablas estï¿½n vacï¿½as, insertar los datos iniciales
 	                    if (usuarioCount == 0 && peliculaCount == 0) 
 	                    {
 	                        // Insertar un usuario con rol admin
-	                        String insertAdmin = "INSERT INTO Usuario (nombre, email, rol, aceptadoPor) VALUES ('Juan Pérez', 'juan@example.com', 'admin', NULL)";
+	                        String insertAdmin = "INSERT INTO Usuario (nombre, email, rol, aceptadoPor) VALUES ('Juan Pï¿½rez', 'juan@example.com', 'admin', NULL)";
 	                        execSQL(insertAdmin);
 
 	                        // Insertar usuarios con rol 'usuario registrado', todos aceptados por el admin (idUsuario = 1)
 	                        String insertUsuarios = "INSERT INTO Usuario (nombre, email, rol, aceptadoPor) "
-	                                + "VALUES ('María López', 'maria@example.com', 'usuario registrado', 1), "
-	                                + "('Carlos García', 'carlos@example.com', 'usuario registrado', 1)";
+	                                + "VALUES ('Marï¿½a Lï¿½pez', 'maria@example.com', 'usuario registrado', 1), "
+	                                + "('Carlos Garcï¿½a', 'carlos@example.com', 'usuario registrado', 1)";
 	                        execSQL(insertUsuarios);
 
-	                        // Insertar películas con el idAceptador del admin (idUsuario = 1)
+	                        // Insertar pelï¿½culas con el idAceptador del admin (idUsuario = 1)
 	                        String insertPeliculas = "INSERT INTO Pelicula (titulo, reparto, anio, puntuacion, idAceptador) "
 	                                + "VALUES ('Inception', 'Leonardo DiCaprio, Joseph Gordon-Levitt', 2010, 8.8, 1), "
 	                                + "('The Matrix', 'Keanu Reeves, Laurence Fishburne', 1999, 8.7, 1), "
@@ -187,7 +196,7 @@ public class GestorBD
 	    } 
 	    catch (SQLException e)
 	    {
-	        System.out.println("Error de conexión o SQL: " + e.getMessage());
+	        System.out.println("Error de conexion o SQL: " + e.getMessage());
 	    }
 	}
 
@@ -214,7 +223,7 @@ public class GestorBD
 		return false;
 	}
 	
-	// Método que verifica si el admin ya existe en la base de datos
+	// Mï¿½todo que verifica si el admin ya existe en la base de datos
 	public boolean adminExiste() {
 		String query = "SELECT COUNT(*) FROM Usuario WHERE rol = 'admin'";
 		try (Connection connection = DriverManager.getConnection(URL); 

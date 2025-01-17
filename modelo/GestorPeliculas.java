@@ -36,7 +36,7 @@ public class GestorPeliculas
 	}
 
 
-	public void añadirResenaAPeli(String peliAbuscar,int idUsuario, int idPelicula, float puntuacion, String comentario) 
+	public void anadirResenaAPeli(String peliAbuscar,int idUsuario, int idPelicula, float puntuacion, String comentario) 
 	{
 		// Recorremos el HashMap de nuestras pelis
 		for (Pelicula pelicula : peliculas.values()) 
@@ -66,7 +66,7 @@ public class GestorPeliculas
 		}
 	}
 	
-	public void añadirPelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
+	public void anadirPelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
                     float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, ArrayList<Resena> lresenas, int quienLaHaAceptado) 
 	{
 		Pelicula unaPeli = new Pelicula(idPelicula, titulo, reparto, anio, puntuacionMedia, perteneceA, lresenas, quienLaHaAceptado);
