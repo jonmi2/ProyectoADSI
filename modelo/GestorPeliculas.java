@@ -1,5 +1,6 @@
 package modelo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GestorPeliculas 
@@ -35,7 +36,7 @@ public class GestorPeliculas
 	}
 
 
-	public void aÃ±adirResenaAPeli(String peliAbuscar,int idUsuario, int idPelicula, float puntuacion, String comentario) 
+	public void añadirResenaAPeli(String peliAbuscar,int idUsuario, int idPelicula, float puntuacion, String comentario) 
 	{
 		// Recorremos el HashMap de nuestras pelis
 		for (Pelicula pelicula : peliculas.values()) 
@@ -63,5 +64,21 @@ public class GestorPeliculas
             
 			}
 		}
+	}
+	
+	public void añadirPelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
+                    float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, ArrayList<Resena> lresenas, int quienLaHaAceptado) 
+	{
+		Pelicula unaPeli = new Pelicula(idPelicula, titulo, reparto, anio, puntuacionMedia, perteneceA, lresenas, quienLaHaAceptado);
+		peliculas.put(idPelicula, unaPeli);
+		GestorBD migestor = GestorBD.getGestorBD();
+		String sentencia = "INSERT INTO Pelicula (idPelicula, titulo, reparto, anio, puntuacion, idAceptador) VALUES ("
+                + idPelicula + ", '"
+                + titulo + ", '"
+                + reparto + ", '"
+                + anio + ", '"
+                + puntuacionMedia + ", '"
+                + quienLaHaAceptado + ")";
+		migestor.execSQL(sentencia);
 	}
 }

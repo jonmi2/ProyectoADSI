@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.ArrayList;
+
 public class GestorPpal 
 {
 	private static GestorPpal miPpal = new GestorPpal();
@@ -58,6 +60,13 @@ public class GestorPpal
 		{
 			return miGestorPelis.buscarInfoPeli(peliAbuscar);
 		}
+	}
+	
+	public void añadirPelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
+                    float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, ArrayList<Resena> lresenas, int quienLaHaAceptado) 
+	{
+		GestorPeliculas miGestorPelis = GestorPeliculas.getGestorPelis();
+		miGestorPelis.añadirPelicula(idPelicula, titulo, reparto, anio, puntuacionMedia, perteneceA, lresenas, quienLaHaAceptado);
 	}
 	
 }
