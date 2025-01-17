@@ -19,7 +19,8 @@ public class Usuario {
     // Constructora
     public Usuario(int idUsuario, String nombre, String email, String rol, ArrayList<ListaPersonalizada> susListas,ArrayList<Resena> susResenas, ArrayList<Alquiler> susAlquileres, int eliminadoPor, int aceptadoPor) 
     {
-        this.idUsuario = idUsuario;
+        
+    	this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.email = email;
         this.rol = rol;
@@ -77,7 +78,7 @@ public class Usuario {
         	}
         }
     }
-    public void eliminarReseña(Resena resena) {
+    public void eliminarResena(Resena resena) {
         susResenas.remove(resena);
     }
 

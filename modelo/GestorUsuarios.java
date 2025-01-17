@@ -69,10 +69,11 @@ public class GestorUsuarios
 	            // Crear listas vacías para susListas y susAlquileres
 	            ArrayList<ListaPersonalizada> susListas = new ArrayList<>();
 	            ArrayList<Alquiler> susAlquileres = new ArrayList<>();
+	            ArrayList<Resena> susResenas = new ArrayList<>();
 
 	            // Crear el objeto Usuario
 	            Usuario usuario = new Usuario(
-	                    idUsuario, nombre, email, rol, susListas, susAlquileres, eliminadoPor, aceptadoPor
+	                    idUsuario, nombre, email, rol, susListas, susResenas, susAlquileres, eliminadoPor, aceptadoPor
 	            );
 
 	            // Añadir al HashMap (clave: idUsuario, valor: Usuario)
@@ -98,6 +99,10 @@ public class GestorUsuarios
 		
 	}
 
+	
+
+	
+	
 	public boolean puedeIniciarsSesion(int pidUsuario) 
 	{
 		//Como en la vista principal ejecutas la funcion de cargar los datos no hace falta volver a hace runa consulta

@@ -3,13 +3,17 @@ package vista;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import modelo.GestorBD;
 import modelo.GestorPpal;
+import modelo.ResultadoSQL;
 
 import java.awt.Color;
 import javax.swing.JButton;
@@ -41,20 +45,31 @@ public class Inicio extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
+	public static void main(String[] args) 
+	{
+		EventQueue.invokeLater(new Runnable() 
+		{
+			public void run() 
+			{
+				try 
+				{
 					Inicio frame = new Inicio();
 					frame.setVisible(true);
 					
+					GestorBD gestorBD = GestorBD.getGestorBD();
+			        gestorBD.inicializarBaseDeDatos(); // Inicializa la base de datos con unos datos la primera vez
+			        
 					//metodo para cargar los datos de la base de datos en objetos de java
 					GestorPpal miPpal = GestorPpal.getGestorPpal();
 					miPpal.cargarDatos();
-				} catch (Exception e) {
+				} 
+				catch (Exception e) 
+				{
 					e.printStackTrace();
 				}
 			}
+			
+			
 		});
 	}
 
