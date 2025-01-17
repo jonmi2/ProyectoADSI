@@ -42,8 +42,23 @@ public class GestorPeliculas
 		{
         // Comparar el titulo de la peli con el nombre buscado
 			if (pelicula.getTitulo().equalsIgnoreCase(peliAbuscar)) {
-				Resena nuevaResena = new Resena(idUsuario, idPelicula, puntuacion, comentario);
-				pelicula.agregarResena(nuevaResena);
+				if (!pelicula.tieneResena(idUsuario)) {
+					Resena nuevaResena = new Resena(idUsuario, idPelicula, puntuacion, comentario);
+					pelicula.agregarResena(nuevaResena);
+					GestorBD migestor = GestorBD.getGestorBD();
+					
+				    String sentencia = "INSERT INTO reseñas (idUsuario, idPelicula, puntuacion, comentario) VALUES ("
+	                        + idUsuario + ", '"
+	                        + idPelicula + ", '"
+	                        + puntuacion + ", '"
+	                        + comentario + ")";
+
+					
+					migestor.execSQL(sentencia);
+				}
+				else {
+					System.out.println("El usuario ya tiene registrada una reseña");
+				}
             // cuando encontremos la peli crear un JSON1 y rellenarlo con los datos de la peli 
             
 			}
