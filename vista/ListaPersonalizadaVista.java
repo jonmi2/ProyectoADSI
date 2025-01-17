@@ -2,8 +2,10 @@ package vista;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import modelo.GestorListaPersonalizada;
+import modelo.GestorUsuarios;
 import modelo.ListaPersonalizada;
 import modelo.Pelicula;
 import modelo.Usuario;
@@ -13,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ListaPersonalizadaVista extends JFrame {
 
@@ -33,13 +36,25 @@ public class ListaPersonalizadaVista extends JFrame {
     private JTextField nombreBuscarPelicula;
     
     //Modelo
-    private int idUsuario;
+    int idUsuario;
+    static GestorUsuarios gUsuario;
+    Usuario usuario;
+    ArrayList<ListaPersonalizada> listasPersonalizadaUsuario;
+    ArrayList<Pelicula> tempPeliculas = new ArrayList<>(); // Array para que se agregen las peliculas al hacer click en ellas
+  
     
-    private static ListaPersonalizadaVista miListaperson = new ListaPersonalizadaVista();
+//	public void actualizar(int idUsuario) {
+//		System.out.println(idUsuario);
+//		this.idUsuario=idUsuario;
+//	}
 
-    private ListaPersonalizadaVista() {
+    public ListaPersonalizadaVista(int idUsuario) {
     	
-    	//this.usuario = usuario;
+    	this.idUsuario = idUsuario;
+    	//CREAMOS EL GESTOR Y EL USUARIO PARA INTERACTUAR CON SUS LISTAS PERSONALIZADAS
+    	System.out.println("FUNCIONA");
+    	this.gUsuario = new GestorUsuarios().getGestorUsuarios();
+        this.usuario = gUsuario.getUsuario(idUsuario);
     	
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 600);
@@ -52,13 +67,12 @@ public class ListaPersonalizadaVista extends JFrame {
         setContentPane(panelListaPersonalizada);
 
         panelListaPersonalizada.add(getPanelTitulo(), BorderLayout.NORTH);
+        
+        //AQUIE CREAR UN PANEL CON LAS MEDIDAS PERSONALIZADAS Y AGREGARLO PARA QUE LUEGO PUEDA PONER LAS QUE YO QUIERA 
+        
         panelListaPersonalizada.add(getPanelListas(), BorderLayout.CENTER);
     }
-    
-    public static ListaPersonalizadaVista getListaPersonalizadaVista()
-    {
-    	return miListaperson;
-    }
+ 
 
     private JPanel getPanelTitulo() {
         if (panelTitulo == null) {
@@ -85,28 +99,159 @@ public class ListaPersonalizadaVista extends JFrame {
         }
         return panelTitulo;
     }
+    
+    private void mostrarDetallesLista(ListaPersonalizada lista) {
+        JOptionPane.showMessageDialog(
+            this,
+            "Detalles de la lista: " + lista.getNombreLista() + "\nNúmero de películas: " + lista.getPelis().size(),
+            "Detalles de la Lista",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    
+    
+    private void mostrarDetallesPelicula(Pelicula pelicula) {
+        // Crear el mensaje de detalles de la película
+        String mensaje = "Nombre: " + pelicula.getTitulo() + 
+                         "\nFecha de estreno: " + pelicula.getAnio() + 
+                         "\nPuntuación: " + pelicula.getPuntuacionMedia();
+        
+        // Mostrar el mensaje usando JOptionPane con la ventana principal como referencia
+        JOptionPane.showMessageDialog(
+            this,  // 'this' hace referencia al JFrame actual (ventana principal)
+            mensaje,  // El mensaje a mostrar
+            "Detalles de la Película",  // Título de la ventana emergente
+            JOptionPane.INFORMATION_MESSAGE  // Tipo de mensaje (informativo)
+        );
+    }
+
 
     private JPanel getPanelListas() {
         if (panelListas == null) {
             panelListas = new JPanel();
-            panelListas.setLayout(new GridLayout(0, 1, 10, 10)); // Listas en columnas
+//            panelListas.setLayout(new BoxLayout(panelListas, BoxLayout.Y_AXIS)); // Cambiado a BoxLayout para un flujo vertical
             panelListas.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-            // Ejemplo de elementos en el panel
-            for (int i = 1; i <= 5; i++) {
-                JLabel listaLabel = new JLabel("Lista " + i, SwingConstants.LEFT);
-                listaLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-                panelListas.add(listaLabel);
-            }
+            // Fijamos el tamaño de panelListas a lo que deseamos
+            panelListas.setPreferredSize(new Dimension(700, 200));  // Fijar tamaño deseado
+
+            // Llamamos a la función para actualizar las listas
+            actualizarVistaListas();
         }
         return panelListas;
     }
-    
+
+    private void actualizarVistaListas() {
+        // Limpiar el panel de listas
+        panelListas.removeAll();
+
+        // Obtener las listas personalizadas del usuario
+        listasPersonalizadaUsuario = usuario.getSusListas(); // Asegúrate de tener la lista de listas actualizada
+
+        // Verificar si las listas están vacías
+        if (listasPersonalizadaUsuario.isEmpty()) {
+            JTextArea mensajeVacio = new JTextArea("No tienes listas personalizadas.");
+            mensajeVacio.setEditable(false);
+            mensajeVacio.setBackground(panelListas.getBackground());
+            mensajeVacio.setFont(new Font("Arial", Font.ITALIC, 16));
+            mensajeVacio.setForeground(Color.RED);
+            mensajeVacio.setAlignmentX(Component.CENTER_ALIGNMENT);
+            panelListas.add(mensajeVacio);
+        } else {
+            // Si hay listas, iteramos para mostrar los botones
+            for (ListaPersonalizada lista : listasPersonalizadaUsuario) {
+                // Crear el panel de la lista
+                JPanel listaPanel = new JPanel();
+                listaPanel.setLayout(new BoxLayout(listaPanel, BoxLayout.X_AXIS)); // Layout en eje horizontal
+
+                // Establecer un borde rojo alrededor del panel de la lista
+                listaPanel.setBackground(Color.LIGHT_GRAY);
+//                listaPanel.setBorder(new LineBorder(Color.BLACK, 1));  // Borde rojo con grosor de 2 píxeles
+
+                // Fijar tamaño fijo para cada panel de lista (sin que se expanda)
+                listaPanel.setPreferredSize(new Dimension(700, 100));  // Fijar tamaño (ancho 780px, altura 100px)
+
+                // Panel izquierdo para el título de la lista y el botón "Ver más"
+                JPanel izquierdaPanel = new JPanel();
+                izquierdaPanel.setLayout(new BoxLayout(izquierdaPanel, BoxLayout.Y_AXIS)); // Layout vertical para el título y botón
+                JTextArea listaNombreArea = new JTextArea(lista.getNombreLista());
+                listaNombreArea.setEditable(false);
+                listaNombreArea.setFont(new Font("Arial", Font.BOLD, 16));
+                listaNombreArea.setBackground(izquierdaPanel.getBackground());
+                listaNombreArea.setForeground(Color.BLACK);
+                listaNombreArea.setLineWrap(true);
+                listaNombreArea.setWrapStyleWord(true);
+                listaNombreArea.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                // Crear el botón para ver más información
+                JButton listaButton = new JButton("Ver más");
+                listaButton.setPreferredSize(new Dimension(200, 40));  // Tamaño del botón
+                listaButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        mostrarDetallesLista(lista);  // Método para mostrar detalles de la lista seleccionada
+                    }
+                });
+
+                // Agregar el nombre de la lista y el botón al panel izquierdo
+                izquierdaPanel.add(listaNombreArea);
+                izquierdaPanel.add(listaButton);
+
+                // Panel derecho para mostrar las películas
+                JPanel derechaPanel = new JPanel();
+                derechaPanel.setLayout(new BoxLayout(derechaPanel, BoxLayout.Y_AXIS)); // Layout vertical para el título y botones de películas
+                JTextArea listaPeliculasNombre = new JTextArea("PELÍCULAS");
+                listaPeliculasNombre.setEditable(false);
+                listaPeliculasNombre.setFont(new Font("Arial", Font.BOLD, 16));
+                listaPeliculasNombre.setBackground(derechaPanel.getBackground());
+                listaPeliculasNombre.setForeground(Color.BLACK);
+                listaPeliculasNombre.setLineWrap(true);
+                listaPeliculasNombre.setWrapStyleWord(true);
+                listaPeliculasNombre.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+                // Agregar el título "PELÍCULAS"
+                derechaPanel.add(listaPeliculasNombre);
+
+                // Agregar las películas al panel de películas
+                for (Pelicula pelicula : lista.getPelis()) {
+                    JButton peliculaButton = new JButton(pelicula.getTitulo());  // Mostrar título de la película
+                    peliculaButton.setPreferredSize(new Dimension(150, 30)); // Ajusta el tamaño de los botones de películas
+                    peliculaButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            // Acción para ver más detalles de la película
+                            mostrarDetallesPelicula(pelicula);
+                        }
+                    });
+                    derechaPanel.add(peliculaButton); // Agregar el botón de la película
+                }
+
+                // Agregar los dos paneles (izquierda y derecha) al panel de la lista
+                listaPanel.add(izquierdaPanel); // Panel izquierdo (título + botón)
+                listaPanel.add(derechaPanel);   // Panel derecho (PELÍCULAS + botones de películas)
+
+                // Agregar el panel de la lista al panel principal
+                panelListas.add(listaPanel);
+            }
+        }
+
+        // Refrescar la vista para aplicar los cambios
+        panelListas.revalidate();
+        panelListas.repaint();
+    }
+
+
+
+
     
     private void mostrarEntradaNombreLista() {
-        // Panel principal para el dialogo
+        // Crear el cuadro de diálogo personalizado
+        JDialog dialog = new JDialog((JFrame) null, "Crear Lista y Buscar Película", true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        // Panel principal para el diálogo
         JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS)); // Layout vertical
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         // Entrada para el nombre de la lista
@@ -114,44 +259,25 @@ public class ListaPersonalizadaVista extends JFrame {
         JLabel promptLabel = new JLabel("Nombre de la nueva lista:");
         promptLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        nombreListaArea = new JTextArea(1, 20); // Una línea para ingresar el nombre
+        nombreListaArea = new JTextArea(1, 20);
         JScrollPane scrollPaneNombreLista = new JScrollPane(nombreListaArea);
-
-        JButton confirmarButton = new JButton("Crear");
-        confirmarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String nombreLista = nombreListaArea.getText().trim();
-                if (!nombreLista.isEmpty()) {
-                    ArrayList<Pelicula> tempPeliculas = new ArrayList<>();
-                    ListaPersonalizada lp = new ListaPersonalizada(nombreLista, "privada", idUsuario, tempPeliculas);
-
-                    System.out.println("Lista creada: " + lp.toString()); // Imprimir en consola
-//                    agregarListaAlPanel(nombreLista); // Agregar la lista al panel central
-                } else {
-                    JOptionPane.showMessageDialog(null, "El nombre de la lista no puede estar vacio.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
 
         nombreListaPanel.add(promptLabel, BorderLayout.WEST);
         nombreListaPanel.add(scrollPaneNombreLista, BorderLayout.CENTER);
-        nombreListaPanel.add(confirmarButton, BorderLayout.EAST);
 
-     // Entrada para buscar pelicula
+        // Entrada para buscar película
         JPanel buscarPeliculaPanel = new JPanel(new BorderLayout(10, 10));
-        JLabel buscarLabel = new JLabel("Buscar pelicula:");
+        JLabel buscarLabel = new JLabel("Buscar película:");
         buscarLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        nombreBuscarPelicula = new JTextField(20); // Campo de texto para buscar peliculas
+        nombreBuscarPelicula = new JTextField(20);
         JButton buscarButton = new JButton("Buscar");
+        
         buscarButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 String nombrePelicula = nombreBuscarPelicula.getText().trim();
-                List<String> infoPeliculas = GestorListaPersonalizada.getGestorListaPersonalizada().buscarPelicula(nombrePelicula);
+                List<List<String>> infoPeliculas = GestorListaPersonalizada.getGestorListaPersonalizada().buscarPelicula(nombrePelicula);
 
                 mostrarBotonesConNombresPeliculas(infoPeliculas);
             }
@@ -161,41 +287,73 @@ public class ListaPersonalizadaVista extends JFrame {
         buscarPeliculaPanel.add(nombreBuscarPelicula, BorderLayout.CENTER);
         buscarPeliculaPanel.add(buscarButton, BorderLayout.EAST);
 
-        // area para mostrar detalles de la pelicula
+        // Área para mostrar detalles de la película
         JPanel detallesPeliculaPanel = new JPanel(new BorderLayout(10, 10));
-        JLabel detallesLabel = new JLabel("Detalles de la pelicula:");
+        JLabel detallesLabel = new JLabel("Detalles de la película:");
         detallesLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        // Panel para los botones de las peliculas
         panelBotonesPeliculas = new JPanel();
-        panelBotonesPeliculas.setLayout(new GridLayout (0, 3, 10, 10)); // Centrado y espaciado entre botones
+        panelBotonesPeliculas.setLayout(new GridLayout(0, 3, 10, 10));
 
-	     // Crear el JScrollPane para envolver el panelBotonesPeliculas
-	     JScrollPane scrollPane = new JScrollPane(panelBotonesPeliculas); 
-	     scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	     scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);// Barra de desplazamiento vertical siempre
-	     scrollPane.setPreferredSize(new Dimension(500, 400)); // Tamano preferido para el scroll
-	
-	     // Reemplazar la adicion de panelBotonesPeliculas directamente al detallesPeliculaPanel
-	     detallesPeliculaPanel.add(scrollPane, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(panelBotonesPeliculas);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(500, 400));
+
+        detallesPeliculaPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Panel para el botón "Crear" debajo del todo
+        JPanel botonCrearPanel = new JPanel();
+        JButton confirmarButton = new JButton("Crear");
+        confirmarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nombreLista = nombreListaArea.getText().trim();
+                if (!nombreLista.isEmpty()) {
+                    
+                    ListaPersonalizada lp = new ListaPersonalizada(nombreLista, "privada", idUsuario, tempPeliculas);
+              
+                    listasPersonalizadaUsuario.add(lp);
+                    dialog.dispose(); // Cerrar el cuadro de diálogo después de crear la lista
+                    
+                    actualizarVistaListas();
+                } else {
+                    JOptionPane.showMessageDialog(dialog, "El nombre de la lista no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        botonCrearPanel.add(confirmarButton); // Añade el botón al panel
 
         // Agregar los paneles al panel principal
         inputPanel.add(nombreListaPanel);
         inputPanel.add(Box.createVerticalStrut(10)); // Espaciado entre componentes
         inputPanel.add(buscarPeliculaPanel);
         inputPanel.add(Box.createVerticalStrut(10)); // Espaciado entre componentes
-        inputPanel.add(detallesPeliculaPanel); // Agregar el panel de detalles
+        inputPanel.add(detallesPeliculaPanel);
+        inputPanel.add(Box.createVerticalStrut(10)); // Espaciado entre detalles y botón
+        inputPanel.add(botonCrearPanel); // Agrega el panel con el botón al final
 
-        // Mostrar el cuadro de dialogo
-        JOptionPane.showMessageDialog(this, inputPanel, "Crear Lista y Buscar Pelicula", JOptionPane.PLAIN_MESSAGE);
+        // Configurar el cuadro de diálogo
+        dialog.getContentPane().add(inputPanel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
     }
-    
-    private void mostrarBotonesConNombresPeliculas(List<String> infoPeliculas) {
-    	panelBotonesPeliculas.removeAll();
 
+
+    
+    private void mostrarBotonesConNombresPeliculas(List<List<String>> infoPeliculas) {
+    	panelBotonesPeliculas.removeAll();
+    	tempPeliculas.clear();
+    	
+    	System.out.println("INFORMACION DE LAS PELICULAS");
+    	System.out.println(infoPeliculas);
+    	
         // Generar botones para las peliculas encontradas
-        for (String p : infoPeliculas) {
+        for (List<String> datosLista : infoPeliculas) {
             
+        	String p = datosLista.get(0);
+        	
         	JLabel labelPelicula = new JLabel(p);
             labelPelicula.setFont(new Font("Arial", Font.PLAIN, 12));
             labelPelicula.setHorizontalAlignment(SwingConstants.CENTER);
@@ -215,7 +373,26 @@ public class ListaPersonalizadaVista extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Accion cuando el usuario hace clic en un boton
-                    System.out.println("Película seleccionada: " + p);
+                	
+                	System.out.printf("Peli agregada -> " + p);
+                	System.out.println();
+                	
+                	//SEGUIR AQUI CON EL REPARTO DE LA PELICULA
+//                	 public Pelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
+//                             float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, int quienLaHaAceptado) {
+                	
+//                	String titulo = p;
+//                	ArrayList<String> reparto = new ArrayList<>();
+//                	int a = (Int) datosLista.get(1);
+//                	float puntuacion = (float) 0.0;
+//                	
+//                	//AGREGAR PELICULA BASE DE DATOS
+//
+//                	Pelicula peli = new Pelicula(new Random().nextInt(10000 - 100 + 1), titulo, reparto, a, puntuacion, this, 1);
+//                	tempPeliculas.add(peli);
+                	
+                    //Crear pelicula
+                    //Agregar a la lista de peliculas
                 }
             });
             
@@ -255,10 +432,7 @@ public class ListaPersonalizadaVista extends JFrame {
         panelListas.repaint();   // Redibujar el panel
     }
 
-	public void actualizar(int idUsuario2) {
-		this.idUsuario=idUsuario2;
-		
-	}
+
 
 }
 

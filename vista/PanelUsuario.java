@@ -154,9 +154,9 @@ public class PanelUsuario extends JFrame {
 	        } 
 	        else if (e.getSource().equals(getListarPersonalizadasButton())) 
 	        {
-	            ListaPersonalizadaVista lpv = ListaPersonalizadaVista.getListaPersonalizadaVista();
+	            ListaPersonalizadaVista lpv = new ListaPersonalizadaVista(idUsuario);
 	            setVisible(false);
-	            lpv.actualizar(idUsuario);
+//	            lpv.actualizar(idUsuario);
 	            lpv.setVisible(true);
 	        }
 	    }

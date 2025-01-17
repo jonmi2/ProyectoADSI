@@ -19,7 +19,7 @@ public class GestorListaPersonalizada {
         return miGestorListaPerso;
     }
 
-    public List<String> buscarPelicula(String nombrePelicula) {
+    public List<List<String>> buscarPelicula(String nombrePelicula) {
         try {
         	URL url = new URL("https://www.omdbapi.com/?apikey=a578d477&s=" + urlEncode(nombrePelicula) + "&type=movie");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -38,7 +38,8 @@ public class GestorListaPersonalizada {
                 }
 
                 in.close();
-                return obtenerNombresPeliculas(content.toString());
+                System.out.println(content.toString());
+                return obtenerDatosPeliculas(content.toString());
             } else {
                 System.out.println("GET request failed");
             }
@@ -62,20 +63,20 @@ public class GestorListaPersonalizada {
         return encodedPelicula;
     }
     
-    public List<String> obtenerNombresPeliculas(String jsonResponse) {
-        List<String> nombresPeliculas = new ArrayList<>();
-        
+    public List<List<String>> obtenerDatosPeliculas(String jsonResponse) {
+        List<List<String>> datosPeliculas = new ArrayList<>(); // Lista principal que contiene listas de datos de películas
+
         try {
             // Extraer la parte del array "Search"
             String searchKey = "\"Search\":";
             int startIndex = jsonResponse.indexOf(searchKey);
             if (startIndex == -1) {
-                return nombresPeliculas; // No se encuentra la clave "Search"
+                return datosPeliculas; // No se encuentra la clave "Search"
             }
-            
+
             // Obtener solo el contenido del array después de "Search"
             String searchArray = jsonResponse.substring(startIndex + searchKey.length()).trim();
-            
+
             // Eliminar los corchetes que encierran el array
             if (searchArray.startsWith("[")) {
                 searchArray = searchArray.substring(1, searchArray.length() - 1).trim();
@@ -84,8 +85,10 @@ public class GestorListaPersonalizada {
             // Dividir el array de objetos de películas por los objetos separados por "},{"
             String[] peliculas = searchArray.split("},\\{");
 
-            // Recorrer cada objeto de película y extraer el título
+            // Recorrer cada objeto de película y extraer los datos
             for (String pelicula : peliculas) {
+                List<String> peliInfo = new ArrayList<>(); // Crear una nueva lista para cada película
+
                 // Buscar la clave "Title" y extraer su valor
                 String titleKey = "\"Title\":\"";
                 int titleStartIndex = pelicula.indexOf(titleKey);
@@ -93,16 +96,42 @@ public class GestorListaPersonalizada {
                     int titleEndIndex = pelicula.indexOf("\"", titleStartIndex + titleKey.length());
                     if (titleEndIndex != -1) {
                         String titulo = pelicula.substring(titleStartIndex + titleKey.length(), titleEndIndex);
-                        nombresPeliculas.add(titulo);
+                        peliInfo.add(titulo); // Agregar el título a la lista de datos de la película
                     }
                 }
+
+                // Buscar el año
+                String yearKey = "\"Year\":\"";
+                int yearStartIndex = pelicula.indexOf(yearKey);
+                if (yearStartIndex != -1) {
+                    int yearEndIndex = pelicula.indexOf("\"", yearStartIndex + yearKey.length());
+                    if (yearEndIndex != -1) {
+                        String year = pelicula.substring(yearStartIndex + yearKey.length(), yearEndIndex);
+                        peliInfo.add(year); // Agregar el año a la lista de datos de la película
+                    }
+                }
+
+                // Buscar el poster
+                String posterKey = "\"Poster\":\"";
+                int posterStartIndex = pelicula.indexOf(posterKey);
+                if (posterStartIndex != -1) {
+                    int posterEndIndex = pelicula.indexOf("\"", posterStartIndex + posterKey.length());
+                    if (posterEndIndex != -1) {
+                        String poster = pelicula.substring(posterStartIndex + posterKey.length(), posterEndIndex);
+                        peliInfo.add(poster); // Agregar el poster a la lista de datos de la película
+                    }
+                }
+
+                // Agregar la lista de datos de la película a la lista principal
+                datosPeliculas.add(peliInfo);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return nombresPeliculas;
+        return datosPeliculas; // Devolver la lista de listas
     }
+
 
     // Nueva función para obtener películas aleatorias
     public List<String> obtenerPeliculasRandom(int cantidad) {

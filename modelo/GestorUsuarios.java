@@ -14,7 +14,7 @@ public class GestorUsuarios
 	private static GestorUsuarios misUsuarios = new GestorUsuarios();
 	private HashMap<Integer, Usuario> usuarios; //int=key y Usuario=Value
 	
-	private GestorUsuarios()
+	public GestorUsuarios()
 	{
 		usuarios = new HashMap<Integer, Usuario>();
 	}
@@ -143,6 +143,12 @@ public class GestorUsuarios
 
 	public String getRolUsuario(int pid) {
 		return usuarios.get(pid).getRol();
+	}
+	
+	public Usuario getUsuario(int idUsuario) {
+		
+		return this.usuarios.get(idUsuario);
+		
 	}
 	
 }
