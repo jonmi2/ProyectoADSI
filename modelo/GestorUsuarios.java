@@ -36,7 +36,7 @@ public class GestorUsuarios
 	        // Recorrer los resultados
 	        while (resultado.next()) {
 	            // Leer los datos de la fila actual
-	            int idUsuario = Integer.parseInt(resultado.getString("idUsuario"));
+	            int idUsuario = resultado.getInt("idUsuario");
 	            String nombre = resultado.getString("nombre");
 	            String email = resultado.getString("email");
 	            String rol = resultado.getString("rol");
@@ -75,7 +75,7 @@ public class GestorUsuarios
 	            Usuario usuario = new Usuario(
 	                    idUsuario, nombre, email, rol, susListas, susAlquileres, eliminadoPor, aceptadoPor
 	            );
-
+	            
 	            // A�adir al HashMap (clave: idUsuario, valor: Usuario)
 	            usuarios.put(idUsuario, usuario);
 	        }

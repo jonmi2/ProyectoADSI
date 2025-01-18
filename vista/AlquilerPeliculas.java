@@ -28,6 +28,7 @@ public class AlquilerPeliculas extends JFrame {
 	private JTextField fieldNombrePeli;
 	private JButton botonBuscar;
 	private Controler controler = null;
+	private int idUsuario;
 
 	/**
 	 * Launch the application.
@@ -138,7 +139,7 @@ public class AlquilerPeliculas extends JFrame {
 				String peliAbuscar= fieldNombrePeli.getText();
 				System.out.println("Peli a buscar= "+peliAbuscar);
 				ResultadoBusqueda rdoBusqueda = ResultadoBusqueda.getRdoBusqueda();
-				rdoBusqueda.actualizar(peliAbuscar);	
+				rdoBusqueda.actualizar(idUsuario, peliAbuscar);	
 				setVisible(false);
 				rdoBusqueda.setVisible(true);
 				
@@ -147,4 +148,8 @@ public class AlquilerPeliculas extends JFrame {
 
 	}
 	//-----------------------------Controler------------------------------------------------
+
+	public void actualizar(int idUsuario) {
+		this.idUsuario=idUsuario;
+	}
 }

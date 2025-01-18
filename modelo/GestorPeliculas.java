@@ -2,6 +2,8 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
+
 
 public class GestorPeliculas 
 {
@@ -80,5 +82,72 @@ public class GestorPeliculas
                 + puntuacionMedia + ", '"
                 + quienLaHaAceptado + ")";
 		migestor.execSQL(sentencia);
+	}
+	
+	public void cargarDatos() {
+	    GestorBD gestorBD = GestorBD.getGestorBD(); // Obtener la instancia del Singleton
+	    String query = "SELECT * FROM Pelicula"; // Consulta para obtener todas las películas
+
+	    try {
+	        ResultadoSQL resultado = gestorBD.consultaSQL(query); // Ejecutar la consulta SQL
+
+	        // Recorrer los resultados
+	        while (resultado.next()) {
+	            // Leer los datos de la fila actual
+	            int idPelicula = resultado.getInt("idPelicula");
+	            String titulo = resultado.getString("titulo");
+	            int anio = resultado.getInt("anio");
+	            float puntuacionMedia = resultado.getFloat("puntuacion");
+
+	            int quienLaHaAceptado;
+	            String quienLaHaAceptadoStr = resultado.getString("quienLaHaAceptado");
+	            if (quienLaHaAceptadoStr == null || quienLaHaAceptadoStr.isEmpty()) {
+	                // Caso en el que "quienLaHaAceptado" sea null en la BD
+	                quienLaHaAceptado = 0;
+	            } else {
+	                quienLaHaAceptado = Integer.parseInt(quienLaHaAceptadoStr);
+	            }
+
+	            // Procesar la columna reparto
+	            String repartoStr = resultado.getString("reparto");
+	            ArrayList<String> reparto = new ArrayList<>();
+	            if (repartoStr != null && !repartoStr.isEmpty()) 
+	            {
+	                String[] actores = repartoStr.split(",");
+	                for (String actor : actores) 
+	                {
+	                    reparto.add(actor.trim()); // Agregar cada actor a la lista, eliminando espacios innecesarios
+	                }
+	            }
+	            
+	            // Crear listas vacías para , perteneceA y susResenas
+	           
+	            ArrayList<ListaPersonalizada> perteneceA = new ArrayList<>();
+	            ArrayList<Resena> susResenas = new ArrayList<>();
+	            
+	            // Crear el objeto Pelicula
+	            Pelicula pelicula = new Pelicula(
+	                idPelicula, titulo, reparto, anio, puntuacionMedia, perteneceA, susResenas, quienLaHaAceptado
+	            );
+
+	            
+	            // Añadir al HashMap (clave: idPelicula, valor: Pelicula)
+	            peliculas.put(idPelicula, pelicula);
+	        }
+
+	        System.out.println("Películas cargadas exitosamente.");
+
+	        // Imprimir películas para comprobar (esto puede eliminarse más adelante)
+	        for (Entry<Integer, Pelicula> entry : peliculas.entrySet()) {
+	        	Integer idPelicula = entry.getKey();
+	            Pelicula pelicula = entry.getValue();
+	            System.out.println("ID Película: " + idPelicula);
+	            System.out.println(pelicula); // Asume que la clase Pelicula tiene un método toString()
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error cargando las películas desde la base de datos.", e);
+	    }
 	}
 }

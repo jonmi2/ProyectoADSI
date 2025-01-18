@@ -30,6 +30,9 @@ public class ResultadoBusqueda extends JFrame {
 	private JButton botonResenas;
 	private Controler controler = null;
 	private JButton botonAtras;
+	private int idPeli;
+	private String nomPeli;
+	private int idUsuario;
 
 	/**
 	 * Launch the application.
@@ -80,6 +83,7 @@ public class ResultadoBusqueda extends JFrame {
 					{
 						System.out.println("vamos a ver resenas!!!!");
 						ResenasVista misResenas = ResenasVista.getResenasVista();
+						misResenas.actualizar(idPeli,nomPeli,idUsuario);
 						setVisible(false);
 						misResenas.setVisible(true);
 					}							
@@ -156,8 +160,10 @@ public class ResultadoBusqueda extends JFrame {
 		return botonResenas;
 	}
 
-	public void actualizar(String peliAbuscar) 
+	public void actualizar(int idUsuario, String peliAbuscar) 
 	{
+		this.idUsuario=idUsuario;
+		
 		//llamo al ppal para q me devuelva un JSON con la info de la peli
 		GestorPpal miPpal = GestorPpal.getGestorPpal();
 		JSON1 peliculaJson = miPpal.buscarInfoPeli(peliAbuscar);	
@@ -172,6 +178,8 @@ public class ResultadoBusqueda extends JFrame {
 			int anioP = peliculaJson.getAnioP();
 			int idP = peliculaJson.getIdP();
 			String nomP = peliculaJson.getNombreP();
+			this.idPeli=idP;
+			this.nomPeli=nomP;
 			float mediaP = peliculaJson.getPuntuMedia();
 			this.lblInfo.setText("id película = " + idP + "\n" +
                     "Nombre = " + nomP + "\n" +

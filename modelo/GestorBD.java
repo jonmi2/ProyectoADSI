@@ -61,14 +61,14 @@ public class GestorBD
 		}
 	}
 	
-	// Mï¿½todo para inicializar la base de datos
+	// Metodo para inicializar la base de datos con unos datos para poder utilizar la aplicación
 	public void inicializarBaseDeDatos() 
 	{
 	    try (Connection conn = DriverManager.getConnection(this.URL)) 
 	    {
 	        if (conn != null)
 	        {
-	            // Verificar si la tabla 'Usuario' ya existe
+	            // Verificar si la tabla 'Usuario' ya existe (con esto hacemos que solo se cree la BD la primera vez que ejecutemos)
 	            String checkTableSQL = "SELECT name FROM sqlite_master WHERE type='table' AND name='Usuario';";
 	            ResultadoSQL resultado = consultaSQL(checkTableSQL);
 	            
@@ -92,10 +92,15 @@ public class GestorBD
 	                String admin = "INSERT INTO Usuario (" +
 	                        "idUsuario, nombre, email, rol, eliminadoPor, aceptadoPor" +
 	                        ") VALUES (" +
-	                        "1, 'Admin', 'admin@example.com', 'admin', NULL, NULL" +
+	                        "1, 'Mbappe', 'admin@example.com', 'admin', NULL, NULL" +
 	                        ");";
 	                execSQL(admin);
-
+	                
+	                // Insertar usuarios con rol 'usuario registrado', todos aceptados por el admin (idUsuario = 1)
+                    String insertUsuarios = "INSERT INTO Usuario (idUsuario, nombre, email, rol, aceptadoPor) "
+                            + "VALUES (2, 'Maria Lopez', 'maria@example.com', 'usuario registrado', 1), "
+                            + "(3, 'Carlos Garcia', 'carlos@example.com', 'usuario registrado', 1)";
+                    execSQL(insertUsuarios);
 	                
 	                
 	                // Crear la tabla 'Pelicula'
@@ -109,6 +114,13 @@ public class GestorBD
 	                        "FOREIGN KEY (idAceptador) REFERENCES Usuario(idUsuario)" +
 	                        ");";
 	                execSQL(createPeliculaTable);
+	                
+	                // Insertar peliculas con el idAceptador del admin (idUsuario = 1)
+                    String insertPeliculas = "INSERT INTO Pelicula (idPelicula, titulo, reparto, anio, puntuacion, idAceptador) "
+                            + "VALUES (1, 'Inception', 'Leonardo DiCaprio, Joseph Gordon-Levitt', 2010, 8.8, 1), "
+                            + "(2, 'The Matrix', 'Keanu Reeves, Laurence Fishburne', 1999, 8.7, 1), "
+                            + "(3, 'The Dark Knight', 'Christian Bale, Heath Ledger', 2008, 9.0, 1)";
+                    execSQL(insertPeliculas);
 
 	                // Crear la tabla 'Lista Personalizada'
 	                String createListaPersonalizadaTable = "CREATE TABLE ListaPersonalizada (" +
@@ -131,6 +143,14 @@ public class GestorBD
 	                        "FOREIGN KEY (idPelicula) REFERENCES Pelicula(idPelicula)" +
 	                        ");";
 	                execSQL(createResenaTable);
+	                
+	             // Insertar reseñas para la película con idPelicula = 1
+	                String insertResenas = "INSERT INTO Resena (idUsuario, idPelicula, comentario, puntuacion) " +
+	                        "VALUES " +
+	                        "(2, 1, 'Excelente película, tiene un guion increíble y actuaciones espectaculares.', 9.0), " +
+	                        "(3, 1, 'Una obra maestra visual y narrativa, simplemente brillante.', 8.5);";
+	                execSQL(insertResenas);
+
 
 	                // Crear la tabla 'Alquiler'
 	                String createAlquilerTable = "CREATE TABLE Alquiler (" +
@@ -152,90 +172,12 @@ public class GestorBD
 	                        "FOREIGN KEY (idLista) REFERENCES ListaPersonalizada(idLista)" +
 	                        ");";
 	                execSQL(createPerteneceTable);
-	            }
-
-	            // Verificar si la tabla 'Usuario' tiene datos
-	            String checkUsuarioDataSQL = "SELECT COUNT(*) AS count FROM Usuario;";
-	            ResultadoSQL resultadoUsuario = consultaSQL(checkUsuarioDataSQL);
-
-	            // Si no hay registros en la tabla 'Usuario', insertar los datos
-	            if (resultadoUsuario.next()) 
-	            {
-	                int usuarioCount = Integer.parseInt(resultadoUsuario.getString("count"));
-	                // Verificar si la tabla 'Pelicula' tiene datos
-	                String checkPeliculaDataSQL = "SELECT COUNT(*) AS count FROM Pelicula;";
-	                ResultadoSQL resultadoPelicula = consultaSQL(checkPeliculaDataSQL);
-	                
-	                if (resultadoPelicula.next()) 
-	                {
-	                    int peliculaCount = Integer.parseInt(resultadoPelicula.getString("count"));
-	                    
-	                    // Si ambas tablas estï¿½n vacï¿½as, insertar los datos iniciales
-	                    if (usuarioCount == 0 && peliculaCount == 0) 
-	                    {
-	                        // Insertar un usuario con rol admin
-	                        String insertAdmin = "INSERT INTO Usuario (nombre, email, rol, aceptadoPor) VALUES ('Juan Pï¿½rez', 'juan@example.com', 'admin', NULL)";
-	                        execSQL(insertAdmin);
-
-	                        // Insertar usuarios con rol 'usuario registrado', todos aceptados por el admin (idUsuario = 1)
-	                        String insertUsuarios = "INSERT INTO Usuario (nombre, email, rol, aceptadoPor) "
-	                                + "VALUES ('Marï¿½a Lï¿½pez', 'maria@example.com', 'usuario registrado', 1), "
-	                                + "('Carlos Garcï¿½a', 'carlos@example.com', 'usuario registrado', 1)";
-	                        execSQL(insertUsuarios);
-
-	                        // Insertar pelï¿½culas con el idAceptador del admin (idUsuario = 1)
-	                        String insertPeliculas = "INSERT INTO Pelicula (titulo, reparto, anio, puntuacion, idAceptador) "
-	                                + "VALUES ('Inception', 'Leonardo DiCaprio, Joseph Gordon-Levitt', 2010, 8.8, 1), "
-	                                + "('The Matrix', 'Keanu Reeves, Laurence Fishburne', 1999, 8.7, 1), "
-	                                + "('The Dark Knight', 'Christian Bale, Heath Ledger', 2008, 9.0, 1)";
-	                        execSQL(insertPeliculas);
-	                    }
-	                }
-	            }
+	            }	         	            
 	        } 
 	    } 
 	    catch (SQLException e)
 	    {
 	        System.out.println("Error de conexion o SQL: " + e.getMessage());
 	    }
-	}
-
-
-
-
-	
-	private boolean tablasExisten(Connection connection) 
-	{
-		try (PreparedStatement statement = connection.prepareStatement(
-				"SELECT COUNT(*) AS cantidad FROM sqlite_master WHERE type='table' AND name='Usuario'"); 
-			 ResultSet resultSet = statement.executeQuery()) 
-		{
-			if (resultSet.next()) 
-			{
-				return resultSet.getInt("cantidad") > 0;
-			}
-		} 
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-			throw new RuntimeException("Error verificando las tablas existentes", e);
-		}
-		return false;
-	}
-	
-	// Mï¿½todo que verifica si el admin ya existe en la base de datos
-	public boolean adminExiste() {
-		String query = "SELECT COUNT(*) FROM Usuario WHERE rol = 'admin'";
-		try (Connection connection = DriverManager.getConnection(URL); 
-			 PreparedStatement statement = connection.prepareStatement(query);
-			 ResultSet resultSet = statement.executeQuery()) {
-			
-			if (resultSet.next()) {
-				return resultSet.getInt(1) > 0; // Si el conteo es mayor que 0, el admin ya existe
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
 	}
 }

@@ -149,7 +149,8 @@ public class PanelUsuario extends JFrame {
 	        {
 	            System.out.println("Funciona: Boton alquileres presionado");
 	            AlquilerPeliculas miAlquilerPeliculas = AlquilerPeliculas.getAlquilerPeliculas();
-	            setVisible(false);
+	            miAlquilerPeliculas.actualizar(idUsuario);
+	            setVisible(false);	
 	            miAlquilerPeliculas.setVisible(true);
 	        } 
 	        else if (e.getSource().equals(getListarPersonalizadasButton())) 

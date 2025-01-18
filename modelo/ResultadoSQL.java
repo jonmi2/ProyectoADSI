@@ -42,4 +42,40 @@ public class ResultadoSQL
 	    }
 	    throw new IllegalStateException("Cursor fuera de rango. Asegúrate de llamar a next() antes.");
 	}
+	
+	public Integer getInt(String tipoAtributo)
+	{
+		if (indiceActual >= 0 && indiceActual < filas.size()) 
+		{
+	        Object valor = filas.get(indiceActual).get(tipoAtributo);
+	        if (valor != null) 
+	        {
+	            return Integer.parseInt(valor.toString()); // Devuelve la representación en cadena si no es null
+	        } 
+	        else 
+	        {
+	            return null; // Devuelve null si el valor es null
+	        }
+	    }
+	    throw new IllegalStateException("Cursor fuera de rango. Asegúrate de llamar a next() antes.");
+	}
+
+	public float getFloat(String tipoAtributo) {
+	    if (indiceActual >= 0 && indiceActual < filas.size()) {
+	        Object valor = filas.get(indiceActual).get(tipoAtributo);
+	        if (valor != null) {
+	            if (valor instanceof Double) {
+	                return ((Double) valor).floatValue();
+	            } else if (valor instanceof Integer) {
+	                return ((Integer) valor).floatValue();
+	            } else {
+	                throw new ClassCastException("El valor no es un tipo numérico compatible.");
+	            }
+	        } else {
+	            return 0; // Devuelve 0 si el valor es null
+	        }
+	    }
+	    throw new IllegalStateException("Cursor fuera de rango. Asegúrate de llamar a next() antes.");
+	}
+
 }

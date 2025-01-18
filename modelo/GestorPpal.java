@@ -22,7 +22,10 @@ public class GestorPpal
 		misUsuarios.cargarDatos();
 		
 		GestorPeliculas misPelis = GestorPeliculas.getGestorPelis();
-//		misPelis.cargarDatos();
+		misPelis.cargarDatos();
+		
+		GestorResenas misResenas = GestorResenas.getGestorResenas();
+		misResenas.cargarDatos();
 		
 		//hay que hacerlo con todos los datos, no solo con los usuarios
 	}
@@ -67,6 +70,12 @@ public class GestorPpal
 	{
 		GestorPeliculas miGestorPelis = GestorPeliculas.getGestorPelis();
 		miGestorPelis.anadirPelicula(idPelicula, titulo, reparto, anio, puntuacionMedia, perteneceA, lresenas, quienLaHaAceptado);
+	}
+
+	public JSON3 getResenasPeli(int idPeli) 
+	{
+		GestorResenas gestorRes = GestorResenas.getGestorResenas();		
+		return gestorRes.getResenasPeli(idPeli);
 	}
 	
 }

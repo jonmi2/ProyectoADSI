@@ -34,7 +34,7 @@ public class Resena
     // M�todo toString
     @Override
     public String toString() {
-        return "Rese�a{" +
+        return "Resena{" +
                 "idUsuario=" + idUsuario +
                 ", idPelicula=" + idPelicula +
                 ", puntuacion=" + puntuacion +
