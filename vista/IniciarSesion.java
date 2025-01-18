@@ -91,9 +91,10 @@ public class IniciarSesion extends JFrame {
 					System.out.println("usuario existe y se puede iniciar sesion");
 					//ahora cambiar de pantalla
 					String rol = GestorPpal.getGestorPpal().getRolUsuario(pid);
+					String nombreU = GestorPpal.getGestorPpal().buscarNombreUsuario(pid);
 					
 					PanelUsuario miPanelUsuario = PanelUsuario.getPanelUsuario();
-					miPanelUsuario.actualizar(pid,rol);
+					miPanelUsuario.actualizar(pid,rol,nombreU);
 					miPanelUsuario.setVisible(true);
 					setVisible(false);				
 				}

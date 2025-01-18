@@ -71,7 +71,7 @@ public class GestorPeliculas
 	public void anadirPelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
                     float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, ArrayList<Resena> lresenas, int quienLaHaAceptado) 
 	{
-		Pelicula unaPeli = new Pelicula(idPelicula, titulo, reparto, anio, puntuacionMedia, perteneceA, lresenas, quienLaHaAceptado);
+		Pelicula unaPeli = new Pelicula(idPelicula, titulo, reparto, anio, puntuacionMedia, lresenas, quienLaHaAceptado);
 		peliculas.put(idPelicula, unaPeli);
 		GestorBD migestor = GestorBD.getGestorBD();
 		String sentencia = "INSERT INTO Pelicula (idPelicula, titulo, reparto, anio, puntuacion, idAceptador) VALUES ("
@@ -97,7 +97,7 @@ public class GestorPeliculas
 	            int idPelicula = resultado.getInt("idPelicula");
 	            String titulo = resultado.getString("titulo");
 	            int anio = resultado.getInt("anio");
-	            float puntuacionMedia = resultado.getFloat("puntuacion");
+	            
 
 	            int quienLaHaAceptado;
 	            String quienLaHaAceptadoStr = resultado.getString("quienLaHaAceptado");
@@ -125,9 +125,10 @@ public class GestorPeliculas
 	            ArrayList<ListaPersonalizada> perteneceA = new ArrayList<>();
 	            ArrayList<Resena> susResenas = new ArrayList<>();
 	            
+	            float puntuacionMedia = GestorResenas.getGestorResenas().obtenerPuntuacion(idPelicula);
 	            // Crear el objeto Pelicula
 	            Pelicula pelicula = new Pelicula(
-	                idPelicula, titulo, reparto, anio, puntuacionMedia, perteneceA, susResenas, quienLaHaAceptado
+	                idPelicula, titulo, reparto, anio, puntuacionMedia, susResenas, quienLaHaAceptado
 	            );
 
 	            
@@ -144,10 +145,23 @@ public class GestorPeliculas
 	            System.out.println("ID Película: " + idPelicula);
 	            System.out.println(pelicula); // Asume que la clase Pelicula tiene un método toString()
 	        }
-
+	        System.out.println("---------------------------------------------");
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        throw new RuntimeException("Error cargando las películas desde la base de datos.", e);
+	    }
+	}
+
+	public Pelicula buscarPeliculaPorId(int idPelicula) 
+	{
+		if (peliculas.containsKey(idPelicula)) 
+		{
+	        return peliculas.get(idPelicula); // Retorna la película si existe en el mapa
+	    } 
+		else 
+		{
+	        System.out.println("Película con ID " + idPelicula + " no encontrada.");
+	        return null; // Devuelve null si no se encuentra la película
 	    }
 	}
 }

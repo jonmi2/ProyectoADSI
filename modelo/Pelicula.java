@@ -10,19 +10,17 @@ public class Pelicula {
     private ArrayList<String> reparto; 
     private int anio;
     private float puntuacionMedia;
-    private ArrayList<ListaPersonalizada> perteneceA; 
     private ArrayList<Resena> susResenas;
     private int quienLaHaAceptado;
 
     // Constructor
     public Pelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
-                    float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, ArrayList<Resena> lresenas, int quienLaHaAceptado) {
+                    float puntuacionMedia, ArrayList<Resena> lresenas, int quienLaHaAceptado) {
         this.idPelicula = idPelicula;
         this.titulo = titulo;
         this.reparto = reparto;
         this.anio = anio;
         this.puntuacionMedia = puntuacionMedia;
-        this.perteneceA = perteneceA;
         this.quienLaHaAceptado = quienLaHaAceptado;
         this.susResenas = lresenas;
     }
@@ -55,10 +53,6 @@ public class Pelicula {
     public void eliminarResena(Resena resena) {
         susResenas.remove(resena);
     }
-    
-    public ArrayList<ListaPersonalizada> getPerteneceA() {
-        return perteneceA;
-    }
 
     public int getQuienLaHaAceptado() {
         return quienLaHaAceptado;
@@ -87,7 +81,6 @@ public class Pelicula {
                 ", reparto=" + String.join(", ", reparto) +
                 ", anio=" + anio +
                 ", puntuacionMedia=" + puntuacionMedia +
-                ", perteneceA=" + perteneceA +
                 ", quienLaHaAceptado=" + quienLaHaAceptado +
                 ", susReseñas=" + susResenas +
                 '}';

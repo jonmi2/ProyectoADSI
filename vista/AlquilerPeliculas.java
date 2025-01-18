@@ -25,10 +25,13 @@ public class AlquilerPeliculas extends JFrame {
 	private JPanel panelAbaj;
 	private JLabel labelAlquilerPelis;
 	private JLabel labelBuscaTuPeli;
-	private JTextField fieldNombrePeli;
-	private JButton botonBuscar;
 	private Controler controler = null;
 	private int idUsuario;
+	private JPanel panel;
+	private JPanel panel_1;
+	private JTextField fieldNombrePeli;
+	private JButton botonBuscar;
+	private JButton btnAtras;
 
 	/**
 	 * Launch the application.
@@ -78,8 +81,8 @@ public class AlquilerPeliculas extends JFrame {
 		if (panelAbaj == null) {
 			panelAbaj = new JPanel();
 			panelAbaj.setLayout(new GridLayout(2, 1, 0, 0));
-			panelAbaj.add(getFieldNombrePeli());
-			panelAbaj.add(getBotonBuscar());
+			panelAbaj.add(getPanel());
+			panelAbaj.add(getPanel_1());
 		}
 		return panelAbaj;
 	}
@@ -101,22 +104,6 @@ public class AlquilerPeliculas extends JFrame {
 			labelBuscaTuPeli.setFont(new Font("Stencil", Font.PLAIN, 18));
 		}
 		return labelBuscaTuPeli;
-	}
-	private JTextField getFieldNombrePeli() {
-		if (fieldNombrePeli == null) {
-			fieldNombrePeli = new JTextField();
-			fieldNombrePeli.setHorizontalAlignment(SwingConstants.CENTER);
-			fieldNombrePeli.setText("Introduce el titulo de la peli que quieras buscar");
-			fieldNombrePeli.setColumns(10);
-		}
-		return fieldNombrePeli;
-	}
-	private JButton getBotonBuscar() {
-		if (botonBuscar == null) {
-			botonBuscar = new JButton("Buscar Pelis");
-			botonBuscar.addActionListener(getControler());
-		}
-		return botonBuscar;
 	}
 	
 	private Controler getControler() {
@@ -144,6 +131,15 @@ public class AlquilerPeliculas extends JFrame {
 				rdoBusqueda.setVisible(true);
 				
 			}
+			else if(e.getSource().equals(getBtnAtras()))
+			{
+				System.out.println("------------------------------------");
+				System.out.println("Pulsado boton de patras");
+				System.out.println("------------------------------------");
+				PanelUsuario pnlUs =PanelUsuario.getPanelUsuario();
+				setVisible(false);
+				pnlUs.setVisible(true);
+			}
 		}
 
 	}
@@ -151,5 +147,45 @@ public class AlquilerPeliculas extends JFrame {
 
 	public void actualizar(int idUsuario) {
 		this.idUsuario=idUsuario;
+	}
+	private JPanel getPanel() {
+		if (panel == null) {
+			panel = new JPanel();
+			panel.setLayout(new GridLayout(0, 1, 0, 0));
+			panel.add(getFieldNombrePeli());
+		}
+		return panel;
+	}
+	private JPanel getPanel_1() {
+		if (panel_1 == null) {
+			panel_1 = new JPanel();
+			panel_1.setLayout(new GridLayout(1, 2, 0, 0));
+			panel_1.add(getBotonBuscar());
+			panel_1.add(getBtnAtras());
+		}
+		return panel_1;
+	}
+	private JTextField getFieldNombrePeli() {
+		if (fieldNombrePeli == null) {
+			fieldNombrePeli = new JTextField();
+			fieldNombrePeli.setText("Introduce el titulo de la peli que quieras buscar");
+			fieldNombrePeli.setHorizontalAlignment(SwingConstants.CENTER);
+			fieldNombrePeli.setColumns(10);
+		}
+		return fieldNombrePeli;
+	}
+	private JButton getBotonBuscar() {
+		if (botonBuscar == null) {
+			botonBuscar = new JButton("Buscar Pelis");
+			botonBuscar.addActionListener(getControler());
+		}
+		return botonBuscar;
+	}
+	private JButton getBtnAtras() {
+		if (btnAtras == null) {
+			btnAtras = new JButton("Atras");
+			btnAtras.addActionListener(getControler());
+		}
+		return btnAtras;
 	}
 }

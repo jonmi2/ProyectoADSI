@@ -105,7 +105,7 @@ public class AlquilarVista extends JFrame {
 	    // Sumar 48 horas a la fecha y hora actual
 	    LocalDateTime dentroDe48Horas = ahora.plusHours(48);
 
-	    // Formatear las fechas a un formato legible (puedes modificar el formato según lo necesites)
+	    // Formatear las fechas a un formato legible 
 	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	    String fechaActual = ahora.format(formatter);
 	    String fecha48Horas = dentroDe48Horas.format(formatter);	
@@ -113,6 +113,13 @@ public class AlquilarVista extends JFrame {
 	    // Cambiar la información en la pantalla
 	    this.lblInfo.setText("Hoy día " + fechaActual + " has alquilado la peli " + nomPeli + 
 	                          ". Tienes hasta el día " + fecha48Horas + " para ver la película.");
+	    
+	    //generar objeto java e introducirlo al gestor
+	    GestorPpal gestorPpal = GestorPpal.getGestorPpal();
+	    gestorPpal.anadirAlquiler(idUsuario, idPeli, ahora);
+	    
+	    //introducir a la BD
+	    
 		}
 	private JPanel getPanelAb() {
 		if (panelAb == null) {

@@ -1,5 +1,8 @@
 package modelo;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.ArrayList;
 
 public class GestorPpal 
@@ -21,13 +24,17 @@ public class GestorPpal
 		GestorUsuarios misUsuarios = GestorUsuarios.getGestorUsuarios();
 		misUsuarios.cargarDatos();
 		
-		GestorPeliculas misPelis = GestorPeliculas.getGestorPelis();
-		misPelis.cargarDatos();
-		
 		GestorResenas misResenas = GestorResenas.getGestorResenas();
 		misResenas.cargarDatos();
 		
-		//hay que hacerlo con todos los datos, no solo con los usuarios
+		GestorPeliculas misPelis = GestorPeliculas.getGestorPelis();
+		misPelis.cargarDatos();		
+		
+		GestorAlquileres misAlquileres = GestorAlquileres.getGestorAlquileres();
+		misAlquileres.cargarDatos();
+		
+		GestorListaPersonalizada misListas = GestorListaPersonalizada.getGestorListaPersonalizada();
+		misListas.cargarDatos();
 	}
 
 	public boolean puedeIniciarSesion(int pidUsuario) 
@@ -76,6 +83,28 @@ public class GestorPpal
 	{
 		GestorResenas gestorRes = GestorResenas.getGestorResenas();		
 		return gestorRes.getResenasPeli(idPeli);
+	}
+
+	public void anadirAlquiler(int idUsuario, int idPeli, LocalDateTime ahora) 
+	{
+		//añadir objeto java al gestor de alquileres
+		GestorAlquileres gestorAlquileres = GestorAlquileres.getGestorAlquileres();
+		gestorAlquileres.crearYadd(idUsuario, idPeli, ahora);
+		
+		//añadir alquiler a la BD
+		// Convertir LocalDateTime a Date en formato 'yyyy-MM-dd'
+	    Date fecha = Date.from(ahora.atZone(ZoneId.systemDefault()).toInstant());
+	    java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd");
+	    String fechaFormateada = dateFormat.format(fecha);
+
+	    // Generar la sentencia SQL
+	    String sentencia = "INSERT INTO Alquiler (idUsuario, idPelicula, fecha) " +
+	                       "VALUES (" + idUsuario + ", " + idPeli + ", '" + fechaFormateada + "')";
+
+	    // Ejecutar la sentencia usando execSQL
+	    GestorBD gestorbd = GestorBD.getGestorBD();
+	    gestorbd.execSQL(sentencia);
+		
 	}
 	
 }

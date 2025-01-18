@@ -116,10 +116,10 @@ public class GestorBD
 	                execSQL(createPeliculaTable);
 	                
 	                // Insertar peliculas con el idAceptador del admin (idUsuario = 1)
-                    String insertPeliculas = "INSERT INTO Pelicula (idPelicula, titulo, reparto, anio, puntuacion, idAceptador) "
-                            + "VALUES (1, 'Inception', 'Leonardo DiCaprio, Joseph Gordon-Levitt', 2010, 8.8, 1), "
-                            + "(2, 'The Matrix', 'Keanu Reeves, Laurence Fishburne', 1999, 8.7, 1), "
-                            + "(3, 'The Dark Knight', 'Christian Bale, Heath Ledger', 2008, 9.0, 1)";
+                    String insertPeliculas = "INSERT INTO Pelicula (idPelicula, titulo, reparto, anio, idAceptador) "
+                            + "VALUES (1, 'Inception', 'Leonardo DiCaprio, Joseph Gordon-Levitt', 2010, 1), "
+                            + "(2, 'The Matrix', 'Keanu Reeves, Laurence Fishburne', 1999, 1), "
+                            + "(3, 'The Dark Knight', 'Christian Bale, Heath Ledger', 2008, 1)";
                     execSQL(insertPeliculas);
 
 	                // Crear la tabla 'Lista Personalizada'

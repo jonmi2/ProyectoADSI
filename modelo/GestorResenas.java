@@ -88,10 +88,37 @@ public class GestorResenas
 	            System.out.println("ID resena: " + idRes);
 	            System.out.println(resena); // Asume que la clase resena tiene un método toString()
 	        }
-
+	        System.out.println("---------------------------------------------");
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        throw new RuntimeException("Error cargando las resenaas desde la base de datos.", e);
 	    }
+	}
+
+	public float obtenerPuntuacion(int idPelicula) 
+	{
+		float cont = 0;
+		float sum =0;
+		float rdo;
+		
+		for (Entry<Integer, Resena> entry : resenas.entrySet()) 
+		{        	
+            Resena resena = entry.getValue();
+            if (resena.getIdPelicula()==idPelicula)
+            {
+            	cont++;
+            	sum=sum+resena.getPuntuacion();
+            }
+        }
+		
+		if (sum==0)
+		{
+			return sum;
+		}
+		else
+		{
+			rdo=sum/cont;
+			return rdo;
+		}
 	}
 }

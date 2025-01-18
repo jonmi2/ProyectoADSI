@@ -29,14 +29,14 @@ public class PanelUsuario extends JFrame {
 	private JPanel panelUsuario;
 	private JPanel panelIzquierdo;
 	private JPanel panelCentral;
-	private JPanel panelBotones;
+	private JPanel panelBotonesUsuario;
 	
 	//JLABELS
 	private JLabel nombreUsuario;
 	
 	//JBUTTONS
-	private JButton boton1;
-    private JButton boton2;
+	private JButton botonActu;
+    private JButton botonCerrarSes;
     private JButton botonAlqui;
 	private JButton listasPersonalizadasButton;
 	
@@ -46,6 +46,17 @@ public class PanelUsuario extends JFrame {
 	//MODELO
 	private int idUsuario;
 	private String rol;
+
+	private String nombreU;
+	private JPanel panelAdmin;
+	private JPanel panelCerrarSesion;
+	private JButton btnValidar;
+	private JButton btnEditar;
+	private JButton btnEliminarCuenta;
+	private JButton btnAceptar;
+	private JButton btnModifResena;
+	private JButton btnResenar;
+	private JButton btnSolicitar;
 	
 	public static PanelUsuario getPanelUsuario()
 	{
@@ -97,7 +108,7 @@ public class PanelUsuario extends JFrame {
 			panelIzquierdo = new JPanel();
 	        panelIzquierdo.setBackground(Color.BLUE); // Fondo azul
 	        panelIzquierdo.setLayout(new BorderLayout()); // Para posicionar el JLabel arriba
-	        panelIzquierdo.setPreferredSize(new Dimension(150, 0));
+	        panelIzquierdo.setPreferredSize(new Dimension(230, 0));
 	        
 	        panelIzquierdo.add(getUserNameLabel(),  BorderLayout.NORTH);
 	        
@@ -108,8 +119,10 @@ public class PanelUsuario extends JFrame {
 	private JPanel getPanelCentral() {
 	    if (panelCentral == null) {
 	        panelCentral = new JPanel();
-	        panelCentral.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Centrar y espaciar
-	        panelCentral.add(getPanelBotones()); // Agregar el panel de botones centrado
+	        panelCentral.setLayout(new GridLayout(3, 1, 0, 0));
+	        panelCentral.add(getPanelAdmin());
+	        panelCentral.add(getPanelBotonesUsuario());
+	        panelCentral.add(getPanelCerrarSesion());
 	    }
 	    return panelCentral;
 	}
@@ -117,10 +130,7 @@ public class PanelUsuario extends JFrame {
 	private JLabel getUserNameLabel() {
 		
 		if (nombreUsuario == null) {
-			GestorPpal miPpal = GestorPpal.getGestorPpal();
-			//String nomUsuario = miPpal.buscarNombreUsuario(this.idUsuario);
-			String nomUsuario = "prueba, creo q las vistas no tienen q ser singleton";
-			nombreUsuario = new JLabel(nomUsuario, SwingConstants.CENTER); //Aqui necesito el usuario para obtener el nombre
+			nombreUsuario = new JLabel(""); 
 			nombreUsuario.setForeground(Color.WHITE);
 			nombreUsuario.setFont(new Font("Arial", Font.BOLD, 14));
 			
@@ -137,13 +147,13 @@ public class PanelUsuario extends JFrame {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 	        // Identificar qeu boton fue presionado y mostrar el mensaje correspondiente en consola
-	        if (e.getSource().equals(getBoton1())) 
+	        if (e.getSource().equals(getActualizarDatos())) 
 	        {
-	            System.out.println("Funciona: Boton 1 presionado");
+	            System.out.println("Funciona: Boton actualizar mis datos presionado");
 	        } 
-	        else if (e.getSource().equals(getBoton2())) 
+	        else if (e.getSource().equals(getBotonCerrar())) 
 	        {
-	            System.out.println("Funciona: Boton 2 presionado");
+	            System.out.println("Funciona: Boton cerrar sesion presionado");
 	        } 
 	        else if (e.getSource().equals(getBotonAlquileres())) 
 	        {
@@ -160,48 +170,83 @@ public class PanelUsuario extends JFrame {
 //	            lpv.actualizar(idUsuario);
 	            lpv.setVisible(true);
 	        }
+	        else if (e.getSource().equals(getBtnAceptar())) 
+	        {
+	        	System.out.println("aceptar solicitudes de registro");
+	        } 
+	        else if (e.getSource().equals(btnEditar)) 
+	        {
+	        	System.out.println("editar cuentas de otros usuarios");   
+	        } 
+	        else if (e.getSource().equals(btnEliminarCuenta)) 
+	        {
+	        	System.out.println("eliminar cuentas de otros usuarios");
+	        } 
+	        else if (e.getSource().equals(btnModifResena)) 
+	        {
+	        	System.out.println("modificar mis resenas");
+	        } 
+	        else if (e.getSource().equals(btnResenar)) 
+	        {
+	        	System.out.println("poner resenasss");
+	        } 
+	        else if (e.getSource().equals(btnSolicitar)) 
+	        {
+	        	System.out.println("solicitar la incorporacion de nuevas pelis");
+	        } 
+	        else if (e.getSource().equals(btnValidar)) 
+	        {
+	        	System.out.println("validar solicitud de pelicula");
+	        } 
+	        else if (e.getSource().equals(botonCerrarSes)) 
+	        {
+	        	System.out.println("cerrar sesion");
+	        } 
 	    }
 	}
 	
-	 private JPanel getPanelBotones() {
-        if (panelBotones == null) {
-        	panelBotones = new JPanel();
-        	panelBotones.setLayout(new GridLayout(2, 2, 50, 50));
-        	panelBotones.setPreferredSize(new Dimension(400, 100));// 2x2 con espaciado de 10px
+	 private JPanel getPanelBotonesUsuario() {
+        if (panelBotonesUsuario == null) {
+        	panelBotonesUsuario = new JPanel();
+        	panelBotonesUsuario.setLayout(new GridLayout(2, 2, 20, 30));
+        	panelBotonesUsuario.setPreferredSize(new Dimension(400, 200));// 2x2 con espaciado de 10px
 
             // Agregar botones
-        	panelBotones.add(getBoton1());
-        	panelBotones.add(getBoton2());
-            panelBotones.add(getBotonAlquileres());
-            panelBotones.add(getListarPersonalizadasButton());
+        	panelBotonesUsuario.add(getActualizarDatos());
+            panelBotonesUsuario.add(getBtnResenar());
+            panelBotonesUsuario.add(getBotonAlquileres());
+            panelBotonesUsuario.add(getListarPersonalizadasButton());
+            panelBotonesUsuario.add(getBtnModifResena());
+            panelBotonesUsuario.add(getBtnSolicitar());
             
         }
-        return panelBotones;
+        return panelBotonesUsuario;
     }
 	 
 	 
 	
 	//Otras fiuncionalidades
 	 
-	 private JButton getBoton1() {
-        if (boton1 == null) {
-            boton1 = new JButton("Botón 1");
-            boton1.setPreferredSize(new Dimension(80, 30));
+	 private JButton getActualizarDatos() {
+        if (botonActu == null) {
+        	botonActu = new JButton("Actualizar mis datos");
+        	botonActu.setPreferredSize(new Dimension(80, 30));
         }
-        return boton1;
+        return botonActu;
     }
 
-    private JButton getBoton2() {
-        if (boton2 == null) {
-            boton2 = new JButton("Botón 2");
-            boton2.setPreferredSize(new Dimension(80, 30));
+    private JButton getBotonCerrar() {
+        if (botonCerrarSes == null) {
+        	botonCerrarSes = new JButton("Cerrar sesion");
+        	botonCerrarSes.setPreferredSize(new Dimension(200, 60));
+        	botonCerrarSes.addActionListener(getControler());
         }
-        return boton2;
+        return botonCerrarSes;
     }
 
     private JButton getBotonAlquileres() {
         if (botonAlqui == null) {
-            botonAlqui = new JButton("Alquiler peliculas (jonmi)");
+            botonAlqui = new JButton("Alquilar pelicula");
             botonAlqui.setPreferredSize(new Dimension(80, 30));
             botonAlqui.addActionListener(getControler());
         }
@@ -221,9 +266,81 @@ public class PanelUsuario extends JFrame {
 		
 	}
 
-	public void actualizar(int pid, String rol) {
+	public void actualizar(int pid, String rol, String nombreU) 
+	{
+		this.nombreU=nombreU;
 		this.idUsuario=pid;
 		this.rol=rol;
+		this.nombreUsuario.setText("Pantalla de "+nombreU);
 	}
 
+	private JPanel getPanelAdmin() {
+		if (panelAdmin == null) {
+			panelAdmin = new JPanel();
+			panelAdmin.setLayout(new GridLayout(2, 2, 50, 50));
+			panelAdmin.add(getBtnAceptar());
+			panelAdmin.add(getBtnEliminarCuenta());
+			panelAdmin.add(getBtnEditar());
+			panelAdmin.add(getBtnValidar());
+		}
+		return panelAdmin;
+	}
+	private JPanel getPanelCerrarSesion() {
+		if (panelCerrarSesion == null) {
+			panelCerrarSesion = new JPanel();
+			panelCerrarSesion.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			panelCerrarSesion.add(getBotonCerrar());
+			panelCerrarSesion.setPreferredSize(new Dimension(400, 50));
+		}
+		return panelCerrarSesion;
+	}
+	private JButton getBtnValidar() {
+		if (btnValidar == null) {
+			btnValidar = new JButton("Validar Peli");
+			btnValidar.addActionListener(getControler());
+		}
+		return btnValidar;
+	}
+	private JButton getBtnEditar() {
+		if (btnEditar == null) {
+			btnEditar = new JButton("Editar datos de un usuario");
+			btnEditar.addActionListener(getControler());
+		}
+		return btnEditar;
+	}
+	private JButton getBtnEliminarCuenta() {
+		if (btnEliminarCuenta == null) {
+			btnEliminarCuenta = new JButton("Eliminar cuenta de otro");
+			btnEliminarCuenta.addActionListener(getControler());
+		}
+		return btnEliminarCuenta;
+	}
+	private JButton getBtnAceptar() {
+		if (btnAceptar == null) {
+			btnAceptar = new JButton("Aceptar solicitudes de registoro");
+			btnAceptar.addActionListener(getControler());
+		}
+		return btnAceptar;
+	}
+	private JButton getBtnModifResena() {
+		if (btnModifResena == null) {
+			btnModifResena = new JButton("Modificar una resena");
+			btnModifResena.addActionListener(getControler());
+		}
+		return btnModifResena;
+	}
+	private JButton getBtnResenar() {
+		if (btnResenar == null) {
+			btnResenar = new JButton("Resenar una peli");
+			btnResenar.addActionListener(getControler());
+		}
+		return btnResenar;
+	}
+	private JButton getBtnSolicitar() {
+		if (btnSolicitar == null) {
+			btnSolicitar = new JButton("Solicitar incorporacion peli");
+			btnSolicitar.addActionListener(getControler());
+		}
+		return btnSolicitar;
+	}
 }

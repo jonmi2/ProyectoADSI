@@ -89,7 +89,7 @@ public class GestorUsuarios
 	            System.out.println("ID Usuario: " + idUsuario);
 	            System.out.println(usuario); // Asume que la clase Usuario tiene un m�todo toString()
 	        }
-
+	        System.out.println("---------------------------------------------");
 	    } 
 	    catch (Exception e) 
 	    {

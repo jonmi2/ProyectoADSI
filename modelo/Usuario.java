@@ -92,4 +92,14 @@ public class Usuario {
                 ", aceptadoPor=" + aceptadoPor +
                 '}';
     }
+
+	public void anadirLista(ListaPersonalizada lista) {
+		this.susListas.add(lista);
+		
+	}
+
+	public void anadirAlqui(Alquiler alquiler) {
+		this.susAlquileres.add(alquiler);
+		
+	}
 }
