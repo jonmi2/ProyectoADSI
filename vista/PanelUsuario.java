@@ -54,8 +54,7 @@ public class PanelUsuario extends JFrame {
 	private JButton btnEditar;
 	private JButton btnEliminarCuenta;
 	private JButton btnAceptar;
-	private JButton btnModifResena;
-	private JButton btnResenar;
+	private JButton btnVerAlquileres;
 	private JButton btnSolicitar;
 	
 	public static PanelUsuario getPanelUsuario()
@@ -155,6 +154,13 @@ public class PanelUsuario extends JFrame {
 	        {
 	            System.out.println("Funciona: Boton cerrar sesion presionado");
 	        } 
+	        else if (e.getSource().equals(btnVerAlquileres)) 
+	        {
+	        	PanelPeliculasAlquiladas miPanelPeliculasAlquiladas = PanelPeliculasAlquiladas.getPanelPeliculasAlquiladas();
+	        	miPanelPeliculasAlquiladas.setPanel(idUsuario);
+	            setVisible(false);	
+	            miPanelPeliculasAlquiladas.setVisible(true);
+	        } 
 	        else if (e.getSource().equals(getBotonAlquileres())) 
 	        {
 	            System.out.println("Funciona: Boton alquileres presionado");
@@ -182,11 +188,7 @@ public class PanelUsuario extends JFrame {
 	        {
 	        	System.out.println("eliminar cuentas de otros usuarios");
 	        } 
-	        else if (e.getSource().equals(btnModifResena)) 
-	        {
-	        	System.out.println("modificar mis resenas");
-	        } 
-	        else if (e.getSource().equals(btnResenar)) 
+	        else if (e.getSource().equals(btnVerAlquileres)) 
 	        {
 	        	System.out.println("poner resenasss");
 	        } 
@@ -216,10 +218,9 @@ public class PanelUsuario extends JFrame {
 
             // Agregar botones
         	panelBotonesUsuario.add(getActualizarDatos());
-            panelBotonesUsuario.add(getBtnResenar());
+            panelBotonesUsuario.add(getBtnVerAlquileres());
             panelBotonesUsuario.add(getBotonAlquileres());
             panelBotonesUsuario.add(getListarPersonalizadasButton());
-            panelBotonesUsuario.add(getBtnModifResena());
             panelBotonesUsuario.add(getBtnSolicitar());
             
         }
@@ -325,19 +326,12 @@ public class PanelUsuario extends JFrame {
 		}
 		return btnAceptar;
 	}
-	private JButton getBtnModifResena() {
-		if (btnModifResena == null) {
-			btnModifResena = new JButton("Modificar una resena");
-			btnModifResena.addActionListener(getControler());
+	private JButton getBtnVerAlquileres() {
+		if (btnVerAlquileres == null) {
+			btnVerAlquileres = new JButton("Ver mis alquileres");
+			btnVerAlquileres.addActionListener(getControler());
 		}
-		return btnModifResena;
-	}
-	private JButton getBtnResenar() {
-		if (btnResenar == null) {
-			btnResenar = new JButton("Resenar una peli");
-			btnResenar.addActionListener(getControler());
-		}
-		return btnResenar;
+		return btnVerAlquileres;
 	}
 	private JButton getBtnSolicitar() {
 		if (btnSolicitar == null) {
