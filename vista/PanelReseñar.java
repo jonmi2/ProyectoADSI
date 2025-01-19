@@ -44,6 +44,10 @@ public class PanelReseñar extends JFrame {
 			}
 		});
 	}
+	public static PanelReseñar getPanelReseñar()
+	{
+		return miPanelReseñar;
+	}
 	private Controler getControler() {
 		if (controler == null) {
 			controler = new Controler();
@@ -70,7 +74,7 @@ public class PanelReseñar extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public PanelReseñar() {
+	private  PanelReseñar() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 730, 327);
 		contentPane = new JPanel();
