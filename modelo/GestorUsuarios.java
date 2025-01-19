@@ -150,5 +150,20 @@ public class GestorUsuarios
 		return this.usuarios.get(idUsuario);
 		
 	}
+	public ArrayList<Integer> getListaAlquilerUs(int idUsuario) {
+	    // Obtener la lista de alquileres del usuario
+	    ArrayList<Alquiler> susAlquileres = usuarios.get(idUsuario).getSusAlquileres();
+
+	    // Crear un ArrayList para almacenar los idPeli
+	    ArrayList<Integer> listaIdPeli = new ArrayList<>();
+
+	    // Recorrer los alquileres y añadir cada idPeli a la lista
+	    for (Alquiler alquiler : susAlquileres) {
+	        listaIdPeli.add(alquiler.getIdPelicula());
+	    }
+
+	    return listaIdPeli;
+	}
+
 	
 }
