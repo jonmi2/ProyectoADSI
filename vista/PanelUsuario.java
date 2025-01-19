@@ -193,6 +193,9 @@ public class PanelUsuario extends JFrame {
 	        else if (e.getSource().equals(btnSolicitar)) 
 	        {
 	        	System.out.println("solicitar la incorporacion de nuevas pelis");
+	        	SolicitudIncorporacion miSolicitud = SolicitudIncorporacion.getSolicitudIncorporacion();
+	        	setVisible(false);
+	        	miSolicitud.setVisible(true);
 	        } 
 	        else if (e.getSource().equals(btnValidar)) 
 	        {
