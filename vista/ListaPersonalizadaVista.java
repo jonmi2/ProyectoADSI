@@ -1,18 +1,24 @@
 package vista;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import modelo.GestorBD;
 import modelo.GestorListaPersonalizada;
+import modelo.GestorPeliculas;
 import modelo.GestorUsuarios;
 import modelo.ListaPersonalizada;
 import modelo.Pelicula;
+import modelo.Resena;
 import modelo.Usuario;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -41,6 +47,7 @@ public class ListaPersonalizadaVista extends JFrame {
     Usuario usuario;
     ArrayList<ListaPersonalizada> listasPersonalizadaUsuario;
     ArrayList<Pelicula> tempPeliculas = new ArrayList<>(); // Array para que se agregen las peliculas al hacer click en ellas
+    ListaPersonalizada lp;
   
     
 //	public void actualizar(int idUsuario) {
@@ -163,17 +170,14 @@ public class ListaPersonalizadaVista extends JFrame {
                 // Crear el panel de la lista
                 JPanel listaPanel = new JPanel();
                 listaPanel.setLayout(new BoxLayout(listaPanel, BoxLayout.X_AXIS)); // Layout en eje horizontal
-
-                // Establecer un borde rojo alrededor del panel de la lista
                 listaPanel.setBackground(Color.LIGHT_GRAY);
-//                listaPanel.setBorder(new LineBorder(Color.BLACK, 1));  // Borde rojo con grosor de 2 píxeles
 
-                // Fijar tamaño fijo para cada panel de lista (sin que se expanda)
-                listaPanel.setPreferredSize(new Dimension(700, 100));  // Fijar tamaño (ancho 780px, altura 100px)
+                // Fijar tamaño fijo para cada panel de lista
+                listaPanel.setPreferredSize(new Dimension(700, 120));  // Fijar tamaño (ancho 700px, altura 120px)
 
-                // Panel izquierdo para el título de la lista y el botón "Ver más"
+                // Panel para el título de la lista y el botón "Ver más"
                 JPanel izquierdaPanel = new JPanel();
-                izquierdaPanel.setLayout(new BoxLayout(izquierdaPanel, BoxLayout.Y_AXIS)); // Layout vertical para el título y botón
+                izquierdaPanel.setLayout(new BoxLayout(izquierdaPanel, BoxLayout.Y_AXIS)); // Alineación vertical
                 JTextArea listaNombreArea = new JTextArea(lista.getNombreLista());
                 listaNombreArea.setEditable(false);
                 listaNombreArea.setFont(new Font("Arial", Font.BOLD, 16));
@@ -185,7 +189,7 @@ public class ListaPersonalizadaVista extends JFrame {
 
                 // Crear el botón para ver más información
                 JButton listaButton = new JButton("Ver más");
-                listaButton.setPreferredSize(new Dimension(200, 40));  // Tamaño del botón
+                listaButton.setPreferredSize(new Dimension(50, 40));  // Tamaño del botón
                 listaButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -197,20 +201,20 @@ public class ListaPersonalizadaVista extends JFrame {
                 izquierdaPanel.add(listaNombreArea);
                 izquierdaPanel.add(listaButton);
 
-                // Panel derecho para mostrar las películas
-                JPanel derechaPanel = new JPanel();
-                derechaPanel.setLayout(new BoxLayout(derechaPanel, BoxLayout.Y_AXIS)); // Layout vertical para el título y botones de películas
+                // Panel para el título "PELÍCULAS" y las películas
+                JPanel centroPanel = new JPanel();
+                centroPanel.setLayout(new BoxLayout(centroPanel, BoxLayout.Y_AXIS)); // Alineación vertical
                 JTextArea listaPeliculasNombre = new JTextArea("PELÍCULAS");
                 listaPeliculasNombre.setEditable(false);
                 listaPeliculasNombre.setFont(new Font("Arial", Font.BOLD, 16));
-                listaPeliculasNombre.setBackground(derechaPanel.getBackground());
+                listaPeliculasNombre.setBackground(centroPanel.getBackground());
                 listaPeliculasNombre.setForeground(Color.BLACK);
                 listaPeliculasNombre.setLineWrap(true);
                 listaPeliculasNombre.setWrapStyleWord(true);
                 listaPeliculasNombre.setAlignmentX(Component.CENTER_ALIGNMENT);
 
                 // Agregar el título "PELÍCULAS"
-                derechaPanel.add(listaPeliculasNombre);
+                centroPanel.add(listaPeliculasNombre);
 
                 // Agregar las películas al panel de películas
                 for (Pelicula pelicula : lista.getPelis()) {
@@ -223,12 +227,30 @@ public class ListaPersonalizadaVista extends JFrame {
                             mostrarDetallesPelicula(pelicula);
                         }
                     });
-                    derechaPanel.add(peliculaButton); // Agregar el botón de la película
+                    centroPanel.add(peliculaButton); // Agregar el botón de la película
                 }
 
-                // Agregar los dos paneles (izquierda y derecha) al panel de la lista
-                listaPanel.add(izquierdaPanel); // Panel izquierdo (título + botón)
-                listaPanel.add(derechaPanel);   // Panel derecho (PELÍCULAS + botones de películas)
+                // Panel para el botón de borrar
+                JPanel derechaPanel = new JPanel();
+                JButton borrarButton = new JButton("Borrar");
+                borrarButton.setPreferredSize(new Dimension(100, 40));
+                borrarButton.setBackground(Color.RED);
+                borrarButton.setForeground(Color.WHITE);
+                borrarButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        // Llamar al método para borrar la lista
+                    	
+                        System.out.println("Borrando lista: " + lista.getNombreLista());
+                        GestorListaPersonalizada.getGestorListaPersonalizada().borrarListaPersonalizada(lista.getNombreLista(), usuario);
+                    }
+                });
+                derechaPanel.add(borrarButton);  // Agregar el botón al panel derecho
+
+                // Agregar las tres secciones al panel de la lista
+                listaPanel.add(izquierdaPanel);  // Sección izquierda (Título + Ver más)
+                listaPanel.add(centroPanel);     // Sección central (PELÍCULAS + Botones de películas)
+                listaPanel.add(derechaPanel);    // Sección derecha (Botón de Borrar)
 
                 // Agregar el panel de la lista al panel principal
                 panelListas.add(listaPanel);
@@ -302,6 +324,17 @@ public class ListaPersonalizadaVista extends JFrame {
 
         detallesPeliculaPanel.add(scrollPane, BorderLayout.CENTER);
 
+        JPanel checkboxPanel = new JPanel();
+        JCheckBox privadaCheckBox = new JCheckBox("Privada", true); // Por defecto seleccionada
+        JCheckBox publicaCheckBox = new JCheckBox("Pública");
+        checkboxPanel.add(privadaCheckBox);
+        checkboxPanel.add(publicaCheckBox);
+
+        // Asegurar que solo uno pueda estar seleccionado
+        privadaCheckBox.addActionListener(e -> publicaCheckBox.setSelected(!privadaCheckBox.isSelected()));
+        publicaCheckBox.addActionListener(e -> privadaCheckBox.setSelected(!publicaCheckBox.isSelected()));
+
+        
         // Panel para el botón "Crear" debajo del todo
         JPanel botonCrearPanel = new JPanel();
         JButton confirmarButton = new JButton("Crear");
@@ -309,10 +342,14 @@ public class ListaPersonalizadaVista extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nombreLista = nombreListaArea.getText().trim();
+                String estado = privadaCheckBox.isSelected() ? "privada" : "publica";
                 if (!nombreLista.isEmpty()) {
                     
-                    ListaPersonalizada lp = new ListaPersonalizada(nombreLista, "privada", idUsuario, tempPeliculas);
+                    lp = new ListaPersonalizada(nombreLista, "privada", idUsuario, tempPeliculas);
               
+                    //Consulta para insertar la lista en la base de datos 
+                    GestorListaPersonalizada.getGestorListaPersonalizada().insertarListaPersonalizada(nombreLista, estado, idUsuario);
+
                     listasPersonalizadaUsuario.add(lp);
                     dialog.dispose(); // Cerrar el cuadro de diálogo después de crear la lista
                     
@@ -332,6 +369,7 @@ public class ListaPersonalizadaVista extends JFrame {
         inputPanel.add(detallesPeliculaPanel);
         inputPanel.add(Box.createVerticalStrut(10)); // Espaciado entre detalles y botón
         inputPanel.add(botonCrearPanel); // Agrega el panel con el botón al final
+        inputPanel.add(checkboxPanel);
 
         // Configurar el cuadro de diálogo
         dialog.getContentPane().add(inputPanel);
@@ -350,55 +388,61 @@ public class ListaPersonalizadaVista extends JFrame {
     	System.out.println(infoPeliculas);
     	
         // Generar botones para las peliculas encontradas
-        for (List<String> datosLista : infoPeliculas) {
-            
-        	String p = datosLista.get(0);
-        	
-        	JLabel labelPelicula = new JLabel(p);
-            labelPelicula.setFont(new Font("Arial", Font.PLAIN, 12));
-            labelPelicula.setHorizontalAlignment(SwingConstants.CENTER);
-            labelPelicula.setVerticalAlignment(SwingConstants.CENTER);
-            labelPelicula.setPreferredSize(new Dimension(150, 50)); // Tamano de los botones
+    	for (List<String> datosLista : infoPeliculas) {
+    	    String nombrePelicula = datosLista.get(0); // Nombre de la película
+    	    String anioPelicula = datosLista.get(1);   // Año de la película
+    	    String linkImagen = datosLista.get(2);     // URL de la imagen
 
-            // Crear un JButton con el JLabel como contenido
-            JButton botonPelicula = new JButton();
-            botonPelicula.setLayout(new BorderLayout());
-            botonPelicula.add(labelPelicula, BorderLayout.CENTER);
-            botonPelicula.setPreferredSize(new Dimension(150, 50)); // Tamano de los botones
+    	    // Panel principal para cada película
+    	    JPanel panelPelicula = new JPanel();
+    	    panelPelicula.setLayout(new BorderLayout());
+    	    panelPelicula.setPreferredSize(new Dimension(150, 250)); // Tamaño ajustado
 
-            // Configurar el boton para que no se corte el texto y se ajuste a multiples lineas
-            labelPelicula.setText("<html>" + p.replaceAll("\n", "<br>") + "</html>");
-        	
-            botonPelicula.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Accion cuando el usuario hace clic en un boton
-                	
-                	System.out.printf("Peli agregada -> " + p);
-                	System.out.println();
-                	
-                	//SEGUIR AQUI CON EL REPARTO DE LA PELICULA
-//                	 public Pelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
-//                             float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, int quienLaHaAceptado) {
-                	
-//                	String titulo = p;
-//                	ArrayList<String> reparto = new ArrayList<>();
-//                	int a = (Int) datosLista.get(1);
-//                	float puntuacion = (float) 0.0;
-//                	
-//                	//AGREGAR PELICULA BASE DE DATOS
-//
-//                	Pelicula peli = new Pelicula(new Random().nextInt(10000 - 100 + 1), titulo, reparto, a, puntuacion, this, 1);
-//                	tempPeliculas.add(peli);
-                	
-                    //Crear pelicula
-                    //Agregar a la lista de peliculas
-                }
-            });
-            
-            botonPelicula.setPreferredSize(new Dimension(70, 30));
-            panelBotonesPeliculas.add(botonPelicula); // Agregar el boton al panel
-        }
+    	    // Crear un JLabel para el nombre y el año
+    	    JLabel labelInfo = new JLabel(
+    	        String.format("<html><div style='text-align: center;'>%s<br>%s</div></html>", nombrePelicula, anioPelicula)
+    	    );
+    	    labelInfo.setFont(new Font("Arial", Font.PLAIN, 12));
+    	    labelInfo.setHorizontalAlignment(SwingConstants.CENTER);
+
+    	    // Cargar la imagen desde el link
+    	    ImageIcon icon = null;
+    	    try {
+    	        URL url = new URL(linkImagen);
+    	        Image img = ImageIO.read(url);
+    	        // Redimensionar la imagen para ajustarse al botón
+    	        Image scaledImg = img.getScaledInstance(150, 100, Image.SCALE_SMOOTH);
+    	        icon = new ImageIcon(scaledImg);
+    	    } catch (Exception e) {
+    	        // Si no se puede cargar la imagen, usar un marcador de posición
+    	        icon = new ImageIcon(new BufferedImage(150, 100, BufferedImage.TYPE_INT_ARGB));
+    	    }
+
+    	    JLabel labelImagen = new JLabel(icon);
+    	    labelImagen.setHorizontalAlignment(SwingConstants.CENTER);
+
+    	    JButton botonPelicula = new JButton("Agregar");
+    	    botonPelicula.setFont(new Font("Arial", Font.PLAIN, 10));
+    	    botonPelicula.setPreferredSize(new Dimension(70, 30)); // Tamaño del botón
+    	    botonPelicula.addActionListener(new ActionListener() {
+    	        @Override
+    	        public void actionPerformed(ActionEvent e) {
+
+    	            System.out.printf("Peli agregada -> %s%n", datosLista.get(0));
+    	            
+    	            //INSERTAR LA PELICULA SELECCIONADA
+    	            tempPeliculas.add(GestorPeliculas.getGestorPelis().insertarPelicula(idUsuario, nombrePelicula, anioPelicula, lp));
+    	        }
+    	    });
+
+    	    panelPelicula.add(labelInfo, BorderLayout.NORTH); // Nombre y año arriba
+    	    panelPelicula.add(labelImagen, BorderLayout.CENTER); // Imagen en el centro
+    	    panelPelicula.add(botonPelicula, BorderLayout.SOUTH); // Botón debajo
+
+    	    // Agregar el panel al contenedor principal
+    	    panelBotonesPeliculas.add(panelPelicula);
+    	}
+
 
         // Refrescar la vista para que los nuevos botones aparezcan
         panelBotonesPeliculas.revalidate();

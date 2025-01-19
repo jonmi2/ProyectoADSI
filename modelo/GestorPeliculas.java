@@ -1,5 +1,7 @@
 package modelo;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -9,6 +11,10 @@ public class GestorPeliculas
 {
 	private static GestorPeliculas miGestorPelis = new GestorPeliculas();
 	private HashMap<Integer, Pelicula> peliculas; //int=key y Pelicula=Value
+	
+	public HashMap<Integer, Pelicula> getPeliculas() {
+		return this.peliculas;
+	}
 	
 	private GestorPeliculas()
 	{
@@ -68,25 +74,70 @@ public class GestorPeliculas
 		}
 	}
 	
-	public void anadirPelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
-                    float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, ArrayList<Resena> lresenas, int quienLaHaAceptado) 
-	{
-		Pelicula unaPeli = new Pelicula(idPelicula, titulo, reparto, anio, puntuacionMedia, lresenas, quienLaHaAceptado);
-		peliculas.put(idPelicula, unaPeli);
-		GestorBD migestor = GestorBD.getGestorBD();
-		String sentencia = "INSERT INTO Pelicula (idPelicula, titulo, reparto, anio, puntuacion, idAceptador) VALUES ("
-                + idPelicula + ", '"
-                + titulo + ", '"
-                + reparto + ", '"
-                + anio + ", '"
-                + puntuacionMedia + ", '"
-                + quienLaHaAceptado + ")";
-		migestor.execSQL(sentencia);
+	public Pelicula insertarPelicula(int idUsuario, String nombrePelicula, String anioPelicula, ListaPersonalizada lp) {
+		GestorPeliculas gp = GestorPeliculas.getGestorPelis();
+        
+        int idPelicula = gp.getPeliculas().keySet().stream().max(Integer::compare).orElse(0) + 1;
+        ArrayList<String> reparto = new ArrayList<>();
+        reparto.add("ActorFamoso");
+        
+        ArrayList<ListaPersonalizada> perteneceA = new ArrayList<>();
+        perteneceA.add(lp);
+        
+        ArrayList<Resena> lresenas = new ArrayList<>();
+        Resena resena1 = new Resena(idUsuario, idPelicula, 5.0f, "Excelente pelÃ­cula"); // Ejemplo
+        lresenas.add(resena1);
+        
+        gp.anadirPelicula(
+        		idPelicula, 
+        		nombrePelicula, 
+        		reparto, 
+        		Integer.parseInt(anioPelicula), 
+        		0.0f, 
+        		perteneceA, 
+        		lresenas, 
+        		idUsuario);
+        
+        return new Pelicula(idPelicula, nombrePelicula, reparto, Integer.parseInt(anioPelicula), 0.0f, lresenas, idUsuario);
+        
+
 	}
+	
+		public void anadirPelicula(
+				int idPelicula, 
+				String titulo, 
+				ArrayList<String> reparto, 
+				int anio,
+	            float puntuacion, 
+	            ArrayList<ListaPersonalizada> perteneceA, 
+	            ArrayList<Resena> lresenas, 
+	            int quienLaHaAceptado) 
+		{
+			Pelicula unaPeli = new Pelicula(idPelicula, titulo, reparto, anio, puntuacion, lresenas, quienLaHaAceptado);
+			
+			peliculas.put(idPelicula, unaPeli);
+			GestorBD migestor = GestorBD.getGestorBD();
+		        
+	        // Creamos la sentencia SQL
+        String sentencia = "INSERT INTO Pelicula (titulo, reparto, anio, puntuacion	, idAceptador) VALUES (?, ?, ?, ?, ?)";
+	
+	        try (PreparedStatement stmt = migestor.prepareStatement(sentencia)) {
+//	            stmt.setInt(1, idPelicula); // Asignamos el valor para el primer parÃ¡metro (idPelicula)
+	            stmt.setString(1, titulo); // Asignamos el valor para el segundo parÃ¡metro (titulo)
+	            stmt.setString(2, String.join(", ", reparto)); // Convertimos el ArrayList en una cadena y lo asignamos
+	            stmt.setInt(3, anio); // Asignamos el valor para el cuarto parÃ¡metro (anio)
+	            stmt.setFloat(4, puntuacion); // Asignamos el valor para el quinto parÃ¡metro (puntuacion)
+	            stmt.setInt(5, quienLaHaAceptado); // Asignamos el valor para el sexto parÃ¡metro (quienLaHaAceptado)
+	
+	            stmt.executeUpdate(); // Ejecutamos la actualizaciÃ³n de la base de datos
+	        } catch (SQLException e) {
+	            e.printStackTrace(); // En caso de error, imprimimos la traza del error
+	        }
+		}
 	
 	public void cargarDatos() {
 	    GestorBD gestorBD = GestorBD.getGestorBD(); // Obtener la instancia del Singleton
-	    String query = "SELECT * FROM Pelicula"; // Consulta para obtener todas las películas
+	    String query = "SELECT * FROM Pelicula"; // Consulta para obtener todas las pelï¿½culas
 
 	    try {
 	        ResultadoSQL resultado = gestorBD.consultaSQL(query); // Ejecutar la consulta SQL
@@ -120,7 +171,7 @@ public class GestorPeliculas
 	                }
 	            }
 	            
-	            // Crear listas vacías para , perteneceA y susResenas
+	            // Crear listas vacï¿½as para , perteneceA y susResenas
 	           
 	            ArrayList<ListaPersonalizada> perteneceA = new ArrayList<>();
 	            ArrayList<Resena> susResenas = new ArrayList<>();
@@ -132,23 +183,23 @@ public class GestorPeliculas
 	            );
 
 	            
-	            // Añadir al HashMap (clave: idPelicula, valor: Pelicula)
+	            // Aï¿½adir al HashMap (clave: idPelicula, valor: Pelicula)
 	            peliculas.put(idPelicula, pelicula);
 	        }
 
-	        System.out.println("Películas cargadas exitosamente.");
+	        System.out.println("Pelï¿½culas cargadas exitosamente.");
 
-	        // Imprimir películas para comprobar (esto puede eliminarse más adelante)
+	        // Imprimir pelï¿½culas para comprobar (esto puede eliminarse mï¿½s adelante)
 	        for (Entry<Integer, Pelicula> entry : peliculas.entrySet()) {
 	        	Integer idPelicula = entry.getKey();
 	            Pelicula pelicula = entry.getValue();
-	            System.out.println("ID Película: " + idPelicula);
-	            System.out.println(pelicula); // Asume que la clase Pelicula tiene un método toString()
+	            System.out.println("ID Pelï¿½cula: " + idPelicula);
+	            System.out.println(pelicula); // Asume que la clase Pelicula tiene un mï¿½todo toString()
 	        }
 	        System.out.println("---------------------------------------------");
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        throw new RuntimeException("Error cargando las películas desde la base de datos.", e);
+	        throw new RuntimeException("Error cargando las pelï¿½culas desde la base de datos.", e);
 	    }
 	}
 
@@ -156,12 +207,12 @@ public class GestorPeliculas
 	{
 		if (peliculas.containsKey(idPelicula)) 
 		{
-	        return peliculas.get(idPelicula); // Retorna la película si existe en el mapa
+	        return peliculas.get(idPelicula); // Retorna la pelï¿½cula si existe en el mapa
 	    } 
 		else 
 		{
-	        System.out.println("Película con ID " + idPelicula + " no encontrada.");
-	        return null; // Devuelve null si no se encuentra la película
+	        System.out.println("Pelï¿½cula con ID " + idPelicula + " no encontrada.");
+	        return null; // Devuelve null si no se encuentra la pelï¿½cula
 	    }
 	}
 }

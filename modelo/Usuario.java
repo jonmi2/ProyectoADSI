@@ -71,11 +71,6 @@ public class Usuario {
     public int getAceptadoPor() {
         return aceptadoPor;
     }
-    
- 
-    
-
-
 
 
     // Metodo toString para imprimir la clase

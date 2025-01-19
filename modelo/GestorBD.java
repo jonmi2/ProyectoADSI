@@ -61,7 +61,21 @@ public class GestorBD
 		}
 	}
 	
-	// Metodo para inicializar la base de datos con unos datos para poder utilizar la aplicación
+	public PreparedStatement prepareStatement(String sql) throws SQLException {
+		
+		try (Connection conn = DriverManager.getConnection(this.URL)) 
+	    {
+			return conn.prepareStatement(sql);
+	    }
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			throw new RuntimeException("Error ejecutando la consulta: " + sql, e);
+		}
+        
+    }
+	
+	// Metodo para inicializar la base de datos con unos datos para poder utilizar la aplicaciï¿½n
 	public void inicializarBaseDeDatos() 
 	{
 	    try (Connection conn = DriverManager.getConnection(this.URL)) 
@@ -144,10 +158,10 @@ public class GestorBD
 	                        ");";
 	                execSQL(createResenaTable);
 	                
-	             // Insertar reseñas para la película con idPelicula = 1
+	             // Insertar reseï¿½as para la pelï¿½cula con idPelicula = 1
 	                String insertResenas = "INSERT INTO Resena (idUsuario, idPelicula, comentario, puntuacion) " +
 	                        "VALUES " +
-	                        "(2, 1, 'Excelente película, tiene un guion increíble y actuaciones espectaculares.', 9.0), " +
+	                        "(2, 1, 'Excelente pelï¿½cula, tiene un guion increï¿½ble y actuaciones espectaculares.', 9.0), " +
 	                        "(3, 1, 'Una obra maestra visual y narrativa, simplemente brillante.', 8.5);";
 	                execSQL(insertResenas);
 

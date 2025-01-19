@@ -13,12 +13,26 @@ import java.util.List;
 public class GestorListaPersonalizada {
 
     private static GestorListaPersonalizada miGestorListaPerso = new GestorListaPersonalizada();
-    private HashMap<Integer, ListaPersonalizada> listas;
+    private HashMap<Integer, ListaPersonalizada> listas = new HashMap<Integer, ListaPersonalizada>();
 
     private GestorListaPersonalizada() { }
 
     public static GestorListaPersonalizada getGestorListaPersonalizada() {
         return miGestorListaPerso;
+    }
+    
+    public void borrarListaPersonalizada(String nombreLista, Usuario usuario) {
+    	
+    	GestorBD gestorBD = GestorBD.getGestorBD();
+    	
+    	String setencia = String.format("DELETE FROM ListaPersonalizada WHERE nombreLista = '%s'", nombreLista);
+    	
+    	gestorBD.execSQL(setencia);
+    	
+    	listas.remove(nombreLista);
+    	
+    	usuario.getSusListas().remove(nombreLista);
+    	
     }
 
     public List<List<String>> buscarPelicula(String nombrePelicula) {
@@ -189,24 +203,37 @@ public class GestorListaPersonalizada {
 
         return nombresAleatorios;
     }
+    
+    public void  insertarListaPersonalizada(String nombreLista, String estado, int idUsuario) {
+    	
+    	GestorBD db = GestorBD.getGestorBD();
+        
+        String insertarListaPersonalizada = String.format(
+    	    "INSERT INTO ListaPersonalizada (nombreLista, estado, idUsuario) VALUES ('%s', '%s', %d);",
+    	    nombreLista, estado, idUsuario
+    	);
+        
+        db.execSQL(insertarListaPersonalizada);
+    	
+    }
 
     public void cargarDatos() {
         GestorBD gestorBD = GestorBD.getGestorBD(); // Obtener la instancia del Singleton
         String queryListas = "SELECT * FROM ListaPersonalizada"; // Consulta para obtener todas las listas
-        String queryPertenece = "SELECT * FROM Pertenece"; // Consulta para obtener las relaciones entre películas y listas
+        String queryPertenece = "SELECT * FROM Pertenece"; // Consulta para obtener las relaciones entre pelï¿½culas y listas
         HashMap<Integer, ArrayList<Pelicula>> peliculasPorLista = new HashMap<>();
 
         try {
-            // Ejecutar la consulta de Pertenece y mapear las películas a las listas
+            // Ejecutar la consulta de Pertenece y mapear las pelï¿½culas a las listas
             ResultadoSQL resultadoPertenece = gestorBD.consultaSQL(queryPertenece);
             while (resultadoPertenece.next()) {
                 int idLista = resultadoPertenece.getInt("idLista");
                 int idPelicula = resultadoPertenece.getInt("idPelicula");
 
-                // Obtener el objeto Pelicula (puedes usar un gestor si está implementado)
+                // Obtener el objeto Pelicula (puedes usar un gestor si estï¿½ implementado)
                 Pelicula pelicula = GestorPeliculas.getGestorPelis().buscarPeliculaPorId(idPelicula);
 
-                // Agregar la película al mapa correspondiente
+                // Agregar la pelï¿½cula al mapa correspondiente
                 peliculasPorLista.putIfAbsent(idLista, new ArrayList<>());
                 peliculasPorLista.get(idLista).add(pelicula);                
             }
@@ -219,22 +246,24 @@ public class GestorListaPersonalizada {
                 String estado = resultadoListas.getString("estado");
                 int idUsuario = resultadoListas.getInt("idUsuario");
 
-                // Obtener las películas asociadas a esta lista
+                // Obtener las pelï¿½culas asociadas a esta lista
                 ArrayList<Pelicula> peliculasAsociadas = peliculasPorLista.getOrDefault(idLista, new ArrayList<>());
 
                 // Crear el objeto ListaPersonalizada
                 ListaPersonalizada lista = new ListaPersonalizada(nombreLista, estado, idUsuario, peliculasAsociadas);
+                
+                System.out.println(lista.toString());
 
-                //buscar usuario y añadirle la lista
+                //buscar usuario y aï¿½adirle la lista
                 GestorUsuarios gestorUs =GestorUsuarios.getGestorUsuarios();
                 gestorUs.getUsuario(idUsuario).anadirLista(lista);
                 
-                // Aquí  almacenar la lista personalizada el mapa
+                // Aquï¿½  almacenar la lista personalizada el mapa
                 this.listas.put(idLista, lista);
                
             }
 
-            System.out.println("Listas personalizadas y películas cargadas exitosamente.");
+            System.out.println("Listas personalizadas y pelï¿½culas cargadas exitosamente.");
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error cargando las listas personalizadas desde la base de datos.", e);

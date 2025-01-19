@@ -12,6 +12,15 @@ public class Pelicula {
     private float puntuacionMedia;
     private ArrayList<Resena> susResenas;
     private int quienLaHaAceptado;
+    
+    //Sobrecargado
+//    public Pelicula(int idPelicula, String titulo, int anio, String thumbnail) {
+//    	
+//    	this.idPelicula = idPelicula;
+//    	this.titulo = titulo;
+//    	this.anio = anio;
+//    	
+//    }
 
     // Constructor
     public Pelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,

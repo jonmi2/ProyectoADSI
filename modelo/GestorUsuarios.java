@@ -32,7 +32,7 @@ public class GestorUsuarios
 	    try 
 	    {
 	        ResultadoSQL resultado = gestorBD.consultaSQL(query); // Ejecutar la consulta SQL
-
+	        
 	        // Recorrer los resultados
 	        while (resultado.next()) {
 	            // Leer los datos de la fila actual
