@@ -3,12 +3,16 @@ package vista;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import modelo.GestorPeliculas;
 import modelo.GestorPpal;
+import modelo.GestorUsuarios;
+
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -18,11 +22,18 @@ public class PanelPeliculasAlquiladas extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private Controler controler = null;
+	private JLabel Pelicula_1;
+	private JLabel Pelicula_2;
+	private JLabel Pelicula_3;
+	private JLabel Pelicula_4;
+	private JLabel Pelicula_5;
+	private JLabel Pelicula_6;
+	private JLabel Pelicula_7;
+	private JLabel Pelicula_8;
+
 
 	/*modelo*/
 	private int idUsuario;
-	private int idPeli;
-	private String nombrePeli;
 	/**
 	 * Launch the application.
 	 */
@@ -127,6 +138,16 @@ public class PanelPeliculasAlquiladas extends JFrame {
 	}
 	public void setPanel(int nuevoNombreUs) {
 		this.idUsuario = nuevoNombreUs;
-	}
+		GestorUsuarios miGUs = GestorUsuarios.getGestorUsuarios();
+		GestorPeliculas miGPs = GestorPeliculas.getGestorPelis();
+		ArrayList<Integer> listaIdPeli = miGUs.getListaAlquilerUs(nuevoNombreUs);
+		Pelicula_1.setText(miGPs.buscarPeliculaPorId(listaIdPeli.get(1)).getTitulo());
+		Pelicula_2.setText(miGPs.buscarPeliculaPorId(listaIdPeli.get(2)).getTitulo());
+		Pelicula_3.setText(miGPs.buscarPeliculaPorId(listaIdPeli.get(3)).getTitulo());
+		Pelicula_4.setText(miGPs.buscarPeliculaPorId(listaIdPeli.get(4)).getTitulo());
+		Pelicula_5.setText(miGPs.buscarPeliculaPorId(listaIdPeli.get(5)).getTitulo());
+		Pelicula_6.setText(miGPs.buscarPeliculaPorId(listaIdPeli.get(6)).getTitulo());
+		Pelicula_7.setText(miGPs.buscarPeliculaPorId(listaIdPeli.get(7)).getTitulo());
+		Pelicula_8.setText(miGPs.buscarPeliculaPorId(listaIdPeli.get(8)).getTitulo());
 
 }
