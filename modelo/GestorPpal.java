@@ -72,6 +72,11 @@ public class GestorPpal
 		}
 	}
 	
+	public void anadirPeliSolicitada (String titulo) {
+		GestorPeliculas miGestorPelis = GestorPeliculas.getGestorPelis();
+		miGestorPelis.anadirPeliSolicitada(titulo);
+	}
+	
 	public void anadirPelicula(int idPelicula, String titulo, ArrayList<String> reparto, int anio,
                     float puntuacionMedia, ArrayList<ListaPersonalizada> perteneceA, ArrayList<Resena> lresenas, int quienLaHaAceptado) 
 	{
@@ -105,6 +110,25 @@ public class GestorPpal
 	    GestorBD gestorbd = GestorBD.getGestorBD();
 	    gestorbd.execSQL(sentencia);
 		
+	}
+	public void anadirResena(String peliAbuscar,int idUsuario, int idPelicula, float puntuacion, String comentario) {
+        GestorPeliculas miGestorPelis = GestorPeliculas.getGestorPelis();
+        miGestorPelis.anadirResenaAPeli(peliAbuscar, idUsuario, idPelicula, puntuacion, comentario);
+    }
+	
+	public ArrayList<String> getPelisAValidar() {
+		GestorPeliculas miGestorPelis = GestorPeliculas.getGestorPelis();
+		return miGestorPelis.getPelisAValidar();
+	}
+	
+	public void validarPeli(String titulo, int idUsuario) {
+		GestorPeliculas miGestorPelis = GestorPeliculas.getGestorPelis();
+		miGestorPelis.validarPeli(titulo, idUsuario);
+	}
+	
+	public void rechazarPeli(String titulo) {
+		GestorPeliculas miGestorPelis = GestorPeliculas.getGestorPelis();
+		miGestorPelis.rechazarPeli(titulo);
 	}
 	
 }

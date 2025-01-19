@@ -59,6 +59,18 @@ public class Pelicula {
         return susResenas;
     }
     
+    public void setReparto(ArrayList<String> reparto) {
+    	this.reparto = reparto;
+    }
+    
+    public void setAnio(int anio) {
+    	this.anio = anio;
+    }
+    
+    public void setAceptador(int idUsuario) {
+    	this.quienLaHaAceptado = idUsuario;
+    }
+    
     public void eliminarResena(Resena resena) {
         susResenas.remove(resena);
     }

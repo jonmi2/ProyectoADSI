@@ -1,10 +1,17 @@
 package modelo;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.Map.Entry;
+
+import org.json.JSONObject;
 
 
 public class GestorPeliculas 
@@ -103,15 +110,22 @@ public class GestorPeliculas
 
 	}
 	
-		public void anadirPelicula(
-				int idPelicula, 
-				String titulo, 
-				ArrayList<String> reparto, 
-				int anio,
-	            float puntuacion, 
-	            ArrayList<ListaPersonalizada> perteneceA, 
-	            ArrayList<Resena> lresenas, 
-	            int quienLaHaAceptado) 
+	public void anadirPeliSolicitada(String titulo) {
+		int idPelicula = peliculas.keySet().stream().max(Integer::compare).orElse(0) + 1;
+		ArrayList<String> reparto = new ArrayList<>();
+		ArrayList<Resena> lresenas = new ArrayList<>();
+		Pelicula nuevaPeli = new Pelicula (idPelicula,titulo,reparto,0,0,lresenas,0);
+		peliculas.put(idPelicula, nuevaPeli);
+	}
+	public void anadirPelicula(
+			int idPelicula, 
+			String titulo, 
+			ArrayList<String> reparto, 
+			int anio,
+	        float puntuacion, 
+	        ArrayList<ListaPersonalizada> perteneceA, 
+	        ArrayList<Resena> lresenas, 
+	        int quienLaHaAceptado) 
 		{
 			Pelicula unaPeli = new Pelicula(idPelicula, titulo, reparto, anio, puntuacion, lresenas, quienLaHaAceptado);
 			
@@ -215,4 +229,89 @@ public class GestorPeliculas
 	        return null; // Devuelve null si no se encuentra la pelï¿½cula
 	    }
 	}
+	
+	public ArrayList<String> getPelisAValidar() {
+		ArrayList<String> lista = new ArrayList<String>();
+		for (Pelicula pelicula : peliculas.values()) 
+	    {
+			if(pelicula.getQuienLaHaAceptado() == 0) {
+				lista.add(pelicula.getTitulo());
+			}
+	    }
+		return lista;
+	}
+	
+	public void validarPeli(String titulo, int idUsuario) {
+		JSO
+		ArrayList<String> reparto = new ArrayList<String>();
+		
+		for (Pelicula pelicula : peliculas.values()) {
+			if(pelicula.getTitulo().equals(titulo)) {
+				pelicula.se
+			}
+	}
+	
+	public void rechazarPeli(String titulo) {
+		for (Pelicula pelicula : peliculas.values()) {
+			if(pelicula.getTitulo().equals(titulo)) {
+				peliculas.remove(pelicula.getIdPelicula());
+			}
+		}
+	}
+	
+	public JSONObject getInfoPeliAPI(String titulo) {
+		 try (Scanner scanner = new Scanner(System.in)) {
+	            while (!titulo.equalsIgnoreCase("exit")) {
+	                String jsonResponse = fetchMovieData(titulo);
+
+	                if (jsonResponse != null) {
+	                    JSONObject jsonObject = new JSONObject(jsonResponse);
+
+	                    if (jsonObject.getString("Response").equals("False")) {
+	                        System.out.println("Película no encontrada.");
+	                    } else {
+	                        // Mostrar información relevante
+	                        System.out.println("Título: " + jsonObject.getString("Title"));
+	                        System.out.println("Año: " + jsonObject.getString("Year"));
+	                        System.out.println("Género: " + jsonObject.getString("Genre"));
+	                        System.out.println("Director: " + jsonObject.getString("Director"));
+	                        System.out.println("Actores: " + jsonObject.getString("Actors"));
+	                        System.out.println("Sinopsis: " + jsonObject.getString("Plot"));
+	                        return jsonObject;
+	                    }
+	                }
+	            }
+	        } 
+		 catch (Exception e) {
+	            System.out.println("Se produjo un error: " + e.getMessage());
+	            e.printStackTrace();
+		 }
+		return jsonObject;
+		 
+	}
+	private static String fetchMovieData(String titulo) {
+        try {
+   		 	String API_KEY = "3c64c9aa";
+            String urlString = "http://www.omdbapi.com/?apikey=" + API_KEY + "&t=" + titulo.replace(" ", "%20");
+            URL url = new URL(urlString);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder respuesta = new StringBuilder();
+            String inputLine;
+
+            while ((inputLine = in.readLine()) != null) {
+                respuesta.append(inputLine);
+            }
+            in.close();
+
+            return respuesta.toString();
+        } catch (Exception e) {
+            System.out.println("Error al realizar la consulta: " + e.getMessage());
+            return null;
+        }
+    }
+		 
 }

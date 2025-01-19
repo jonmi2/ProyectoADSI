@@ -171,7 +171,7 @@ public class GestorBD
 	                        "idUsuario INTEGER," +
 	                        "idPelicula INTEGER," +
 	                        "fecha DATE," +
-	                        "PRIMARY KEY (idUsuario, idPelicula)," +
+	                        "PRIMARY KEY (idUsuario, idPelicula, fecha)," +
 	                        "FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)," +
 	                        "FOREIGN KEY (idPelicula) REFERENCES Pelicula(idPelicula)" +
 	                        ");";
